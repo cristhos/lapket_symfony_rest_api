@@ -1,0 +1,68 @@
+<?php
+
+namespace Masta\PlateFormeBundle\Entity\Report;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Report
+ *
+ * @ORM\Table(name="reports")
+ * @ORM\Entity(repositoryClass="Masta\ReportBundle\Repository\Report\ReportRepository")
+ */
+class Report
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="publishedAt", type="datetime")
+     */
+    private $publishedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="reportStatus", type="integer")
+     */
+    private $reportStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="authorMessage", type="string", length=255)
+     */
+    private $authorMessage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fixerMessage", type="string", length=255)
+     */
+    private $fixerMessage;
+
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Masta\UserBundle\Entity\User")
+     */
+    private $author;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Masta\UserBundle\Entity\User")
+     */
+    private $fixer;
+
+    public function __construct()
+    {
+        $this->publishedAt = new \DateTime();
+    }
+}
+

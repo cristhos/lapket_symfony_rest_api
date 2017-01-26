@@ -1,0 +1,40 @@
+#BASE ROUTE
+masta_core:
+    resource: "@MastaCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#REST ROUTE
+rest :
+  type : rest
+  resource : "routing_rest.yml"
+  prefix : /api
+
+fos_user:
+  resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+  options:
+      expose: true
+
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+
+
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+
+
+
+facebook_login:
+    path: /login/check-facebook
+
+google_login:
+    path: /login/check-google

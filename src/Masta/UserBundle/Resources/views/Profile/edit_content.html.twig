@@ -1,0 +1,102 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, { 'action': path('fos_user_profile_edit'), 'attr': { 'class': 'fos_user_profile_edit ' } }) }}
+    <h4 class="list-group text-center">Informations de base</h4>
+    <p class="list-group-item text-center">
+      {% if app.user.profilePicture is not null %}
+        <img
+          src="{{ asset(app.user.profilePicture.getWebPath) }}"
+          alt="{{ app.user.profilePicture.alt }}"
+          height="100"
+        />
+      {%endif%}
+    </p>
+    <p class="list-group-item">
+
+      {{ form_errors(form.profilePicture) }}
+      {{ form_widget(form.profilePicture)  }}
+
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.username)}}
+      {{ form_errors(form.username) }}
+      {{ form_widget(form.username,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.fullName,"Nom complet")}}
+      {{ form_errors(form.fullName) }}
+      {{ form_widget(form.fullName,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.email)}}
+      {{ form_errors(form.email) }}
+      {{ form_widget(form.email,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.country,'Pays')}}
+      {{ form_errors(form.country) }}
+      {{ form_widget(form.country,{'attr': {'class': 'form-control'}})  }}
+    </p>
+
+	<h4 class="text-center list-group">Plus d'information</h4>
+  <p class="list-group-item">
+    {{ form_label(form.birthday,'Date de naissance')}}
+    {{ form_errors(form.birthday) }}
+    {{ form_widget(form.birthday,{'attr': {'class': 'form-control'}})  }}
+  </p>
+  <p class="list-group-item">
+    {{ form_label(form.gender,'Sexe')}}
+    {{ form_errors(form.gender) }}
+    {{ form_widget(form.gender,{'attr': {'class': 'form-control'}})  }}
+  </p>
+  <p class="list-group-item">
+    {{ form_label(form.location,'Ville actuel')}}
+    {{ form_errors(form.location) }}
+    {{ form_widget(form.location,{'attr': {'class': 'form-control'}})  }}
+  </p>
+  <p class="list-group-item">
+    {{ form_label(form.webSite,'Site web')}}
+    {{ form_errors(form.webSite) }}
+    {{ form_widget(form.webSite,{'attr': {'class': 'form-control'}})  }}
+  </p>
+  <p class="list-group-item">
+    {{ form_label(form.language,'Langue ')}}
+    {{ form_errors(form.language) }}
+    {{ form_widget(form.language,{'attr': {'class': 'form-control'}})  }}
+  </p>
+  <p class="list-group-item">
+    {{ form_label(form.description,'Mini Biographie')}}
+    {{ form_errors(form.description) }}
+    {{ form_widget(form.description,{'attr': {'class': 'form-control'}})  }}
+  </p>
+
+
+  	<h4 class="text-center list-group">Configuration</h4>
+    <p class="list-group-item">
+      {{ form_label(form.isPrivate,'Rendre privé')}}
+      {{ form_errors(form.isPrivate) }}
+      {{ form_widget(form.isPrivate,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.notifications,'Notifications')}}
+      {{ form_errors(form.notifications) }}
+      {{ form_widget(form.notifications,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+      {{ form_label(form.cookies,'Cookies')}}
+      {{ form_errors(form.cookies) }}
+      {{ form_widget(form.cookies,{'attr': {'class': 'form-control'}})  }}
+    </p>
+    <p class="list-group-item">
+
+    </p>
+
+		<p><a class="btn btn-link pull-" href="{{path('fos_user_change_password')}}">Changer le mot de passe</a></p>
+    <div>
+    	{{ form_label(form.current_password)}}
+		{{ form_errors(form.current_password) }}
+		{{ form_widget(form.current_password,{'attr': {'class': 'form-control'}})  }}
+        <input type="submit" value="{{ 'profile.edit.submit'|trans }}" class="btn btn-success pull-right"/>
+    </div>
+    {{ form_rest(form) }}
+{{ form_end(form) }}

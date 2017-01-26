@@ -1,0 +1,51 @@
+Masta\UserBundle\Entity\User:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        profilePicture:
+            expose : true
+        fullName :
+            expose : true
+        country :
+            expose : true
+        city :
+            expose : true
+        gender :
+            expose : true
+        birthday :
+            expose : true
+        description :
+            expose : true
+        phoneNumber :
+            expose : true
+        webSite :
+            expose : true
+        isPrivate :
+            expose : true
+        isMailNotify:
+            expose : true
+        nbFollows :
+            expose : true
+        nbFollowers :
+            expose : true
+        nbProducts :
+            expose : true
+        nbProductVotes:
+            expose : true
+        nbCategoryFollows:
+            expose : true
+        nbAlbums :
+            expose : true
+        nbNotifications:
+            expose : true
+        nbReceivedMessages:
+            expose : true
+        isAuthor :
+            expose : true
+        isFollowIt :
+            expose : true
+        isFollowMe :
+            expose : true
+        compteState :
+            expose : true

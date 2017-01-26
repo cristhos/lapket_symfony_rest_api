@@ -1,0 +1,17 @@
+Masta\PlateFormeBundle\Entity\Album\Album:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        name:
+            expose : true
+        description :
+            expose : true
+        publishedAt:
+            expose : true
+        category :
+            expose : true
+        author :
+            expose : true
+        isAuthor :
+            expose : true

@@ -1,0 +1,25 @@
+users:
+    type:     rest
+    resource: Masta\UserBundle\Controller\UserController
+    options:
+        expose: true
+
+
+user_followers:
+    type:     rest
+    resource: Masta\UserBundle\Controller\FollowerController
+    options:
+        expose: true
+
+
+user_coutries:
+    type:     rest
+    resource: Masta\UserBundle\Controller\CountryController
+    options:
+        expose: true
+
+user_cities:
+    type:     rest
+    resource: Masta\UserBundle\Controller\CityController
+    options:
+        expose: true

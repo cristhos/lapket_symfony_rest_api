@@ -1,0 +1,59 @@
+imports:
+    - { resource: config.yml }
+    - { resource: parameters_dev.yml }
+
+framework:
+    router:
+        resource: "%kernel.root_dir%/config/routing_dev.yml"
+        strict_requirements: true
+    profiler: { only_exceptions: false }
+
+web_profiler:
+    toolbar: true
+    intercept_redirects: false
+
+monolog:
+    handlers:
+        main:
+            type: stream
+            path: "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+            channels: [!event]
+        console:
+            type:   console
+            bubble: false
+            channels: [!event, !doctrine]
+        # uncomment to get logging in your browser
+        # you may have to allow bigger header sizes in your Web server configuration
+        firephp:
+            type:   firephp
+            level:  info
+        chromephp:
+            type:   chromephp
+            level:  info
+assetic:
+    use_controller: true
+
+#swiftmailer:
+#    delivery_address: me@example.com
+
+bazinga_faker:
+    orm: doctrine
+    entities:
+        Masta\UserBundle\Entity\User:
+            number: 100
+            custom_formatters:
+                gender:   { method: randomElement, parameters: [ [ 'm', 'f'] ] }
+                location:   { method: randomElement, parameters: [ [ 'Lubumbashi', 'Kinshasa', 'Goma' ] ] }
+                nbFollowers:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbFollows:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbAlbums:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbProducts:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbProductVotes:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbCategoryFollows:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+        Masta\PlateFormeBundle\Entity\Category\Category:
+            number: 20
+            custom_formatters:
+                sector:   { method: randomElement, parameters: [ [ 'Habillement', 'Electronique', 'Auto-mobile', 'Immobilier' ] ] }
+                nbFollowers:   { method: randomElement, parameters: [ [ 0, 0 ] ] }
+                nbAlbums:   { method: randomElement, parameters: [ [ 0, 0 ] ] }

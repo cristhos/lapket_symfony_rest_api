@@ -1,0 +1,13 @@
+masta_core_homepage:
+    path:     /
+    defaults: { _controller: MastaCoreBundle:Core:index}
+    options:
+        expose: true
+
+#masta_core_homepage:
+    #path:     /{reactRouting}
+    #defaults: { _controller: MastaCoreBundle:Core:index, reactRouting: null}
+    #requirements:
+        #reactRouting: ".+"
+    #options:
+        #expose: true

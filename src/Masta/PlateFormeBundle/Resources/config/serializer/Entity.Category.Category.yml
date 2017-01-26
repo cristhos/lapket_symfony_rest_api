@@ -1,0 +1,17 @@
+Masta\PlateFormeBundle\Entity\Category\Category:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        name :
+            expose : true
+        publishedAt:
+            expose : true
+        nbAlbums :
+            expose : true
+        nbFollowers :
+            expose : true
+        isFollow:
+            expose : true
+        isAuthent:
+            expose : true

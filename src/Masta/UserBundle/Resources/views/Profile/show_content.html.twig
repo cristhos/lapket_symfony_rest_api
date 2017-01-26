@@ -1,0 +1,101 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div class="fos_user_user_show">
+  <h3 class="list-group text-center">Informations de base</h3>
+    <p class="list-group-item text-center">
+      {% if user.profilePicture is not null %}
+        <img
+          src="{{ asset(user.profilePicture.getWebPath) }}"
+          alt="{{ user.profilePicture.alt }}"
+          height="100"
+        />
+      {%endif%}
+    </p>
+    <p class="list-group-item">Nom complet: <strong>{{ user.fullName }}</strong></p>
+    <p class="list-group-item">{{ 'profile.show.username'|trans }}: <strong>{{ user.username }}</strong></p>
+    <p class="list-group-item">{{ 'profile.show.email'|trans }}: <strong>{{ user.email }}</strong></p>
+    <p class="list-group-item">Ville actuel: <strong>{{ user.location }}</strong></p>
+    <p class="list-group-item">Pays: <strong>{{ user.country }}</strong></p>
+  <h3 class="list-group text-center">Informations supplémentaires</h3>
+    <p class="list-group-item">
+      Sexe:
+      <strong>
+      {% if user.gender is not null%}
+      {{ user.gender }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Langue:
+      <strong>
+      {% if user.language is not null%}
+      {{ user.language }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Date de naissance:
+      <strong>
+      {% if user.birthday is not null%}
+      {{ user.birthday }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Site Web:
+      <strong>
+      {% if user.webSite is not null%}
+      {{ user.webSite }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+  <h3 class="list-group text-center">Configurations</h3>
+    <p class="list-group-item">
+      Cookies:
+      <strong>
+      {% if user.cookies is not null%}
+        <span class="text-success">Oui</span>
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Facebook:
+      <strong>
+      {% if user.facebookId is not null%}
+      {{ user.facebookId }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Google:
+      <strong>
+      {% if user.googleId is not null%}
+      {{ user.googleId }}
+      {% else %}
+        <span class="text-danger">Non</span>
+      {% endif%}
+      </strong>
+    </p>
+    <p class="list-group-item">
+      Type de compte:
+      <strong>
+      {% if user.isPrivate is not null%}
+      <span >Privé</span>
+      {% else %}
+        <span >Public</span>
+      {% endif%}
+      </strong>
+    </p>
+</div>

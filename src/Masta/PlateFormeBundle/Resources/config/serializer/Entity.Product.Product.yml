@@ -1,0 +1,33 @@
+Masta\PlateFormeBundle\Entity\Product\Product:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        name :
+            expose : true
+        description :
+            expose : true
+        price:
+            expose : true
+        author :
+            expose : true
+        publishedAt :
+            expose : true
+        nbVotes :
+            expose : true
+        isExpired :
+            expose : true
+        isAuthor :
+            expose : true
+        isVoted :
+            expose : true
+        isFollow :
+            expose : true
+        isNotify :
+            expose : true
+        album :
+            expose : true
+        picture:
+            expose : true
+        rank :
+            expose : true

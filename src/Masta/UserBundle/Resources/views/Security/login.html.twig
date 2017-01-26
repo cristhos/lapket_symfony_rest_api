@@ -1,0 +1,7 @@
+{% extends "MastaUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+{% block title %}{{ parent() }} | login{% endblock %}
+{% block fos_user_content %}
+	{% include "MastaUserBundle:Security:core_login.html.twig" %}
+{% endblock fos_user_content %}

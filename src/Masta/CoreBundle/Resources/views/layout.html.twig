@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Une application pour tout acheter">
+        <meta name="author" content="Lithos Cristal">
+        <title>{% block title %}mapket{% endblock %}</title>
+        {% block stylesheets %}
+            <link href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('assets/vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" />
+            <link href="{{ asset('bundles/mastacore/css/core.css') }}" rel="stylesheet" />
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+      {% block header %}
+          <nav class="navbar navbar-inverse navbar-fixed-top">
+              <div class="container">
+                  <div class="navbar-header">
+                      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                          <span class="sr-only">Toggle navigation</span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                          <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand" href="{{ path('masta_core_homepage')}}">m</a>
+                  </div>
+                  <div id="navbar" class="navbar-collapse collapse">
+
+                  <span class="pull-right">
+                      <ul class="nav navbar-nav">
+                              <li><a href="{{ path('nelmio_api_doc_index') }}"><i class="fa fa-api"></i> Api doc</a></li>
+
+                              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                                  {% if app.user %}
+                                      <li class="dropdown">
+                                          <a href="#" class="dropdown-toggle pull-left" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                            {% if app.user.profilePicture is not null %}
+                                              <img
+                                                src="{{ asset(app.user.profilePicture.getWebPath) }}"
+                                                alt="{{ app.user.profilePicture.alt }}"
+                                                height="20"
+                                              />
+                                              {%else%}
+                                              <i class="fa fa-user fa-5x"></i>
+                                            {%endif%}
+                                            {{ app.user.username }}<span class="caret"></span>
+                                          </a>
+                                          <ul class="dropdown-menu pull-right">
+                                          <li class="text-center">
+                                                  <a href="{{ path('fos_user_profile_show') }}">
+                                                    {% if app.user.profilePicture is not null %}
+                                                      <img
+                                                        src="{{ asset(app.user.profilePicture.getWebPath) }}"
+                                                        alt="{{ app.user.profilePicture.alt }}"
+                                                        height="60"
+                                                      />
+                                                      {%else%}
+                                                      <i class="fa fa-user fa-5x"></i>
+                                                    {%endif%}
+                                                  <p class="text-center">{{ app.user.username }} {% if app.user.fullname is not null%} {{ app.user.fullName }} {% endif %}</p>
+                                                  </a>
+                                              </li>
+                                              <li><a href="{{ path('fos_user_profile_edit') }}"></i><i class="fa fa-cog"></i> Parametres</a></li>
+                                              {% if app.user and is_granted('ROLE_ADMIN') %}
+                                                  <li>
+                                                      <a href="#">
+                                                          <i class=""></i> Administration
+                                                      </a>
+                                                  </li>
+                                              {% endif %}
+                                              <li class="divider"></li>
+                                              <li>
+                                                  <a href="{{ path('fos_user_security_logout') }}">
+                                                      <i class="fa fa-sign-out"></i> {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                                                  </a>
+                                              </li>
+                                          </ul>
+                                      </li>
+
+                              {% endif %}
+                                  {% else %}
+                                  <a class="btn btn-link navbar-btn" href="{{ path('fos_user_registration_register') }}">{{ 'layout.register'|trans({}, 'FOSUserBundle') }}</a>
+                                  <a class="btn btn-success navbar-btn" href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+                          {% endif %}
+                      </ul>
+                    </span>
+                  </div>
+              </div>
+          </nav>
+      {% endblock %}
+    {% block content %}
+                {% block fos_user_content %}{% endblock %}
+    {% endblock %}
+    {% block javascripts %}
+        <script src="{{ asset('assets/vendor/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/vendor/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+        <script src="{{ asset('bundles/mastacore/js/boostrap-modal.js') }}"></script>
+    {% endblock %}
+    </body>
+</html>

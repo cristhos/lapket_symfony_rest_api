@@ -1,0 +1,27 @@
+parameters:
+    my_user_provider.class: Masta\UserBundle\Security\Core\User\FOSUBUserProvider
+
+services:
+#    masta_user.example:
+#        class: Masta\UserBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    masta_user.password_resetting:
+        class: Masta\UserBundle\EventListener\PasswordResettingListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    masta_user.form.registration:
+        class: Masta\UserBundle\Form\RegistrationType
+        tags:
+            - { name: form.type, alias: masta_user_registration }
+
+    masta_user.form.profile:
+        class: Masta\UserBundle\Form\ProfileType
+        tags:
+            - { name: form.type, alias: masta_user_profile }
+
+    my_user_provider:
+        class: "%my_user_provider.class%"
+        #this is the place where the properties are passed to the UserProvider - see config.yml
+        arguments: [@fos_user.user_manager,{facebook: facebook_id, twitter: twitter_id, google: google_id}]

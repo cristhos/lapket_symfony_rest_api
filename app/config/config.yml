@@ -1,0 +1,295 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: admin.yml }
+
+parameters:
+    locale: en
+    app.path.product_images: /uploads/images/product
+
+framework:
+    #esi:             ~
+    translator:      { fallback: %locale% }
+    secret:          %secret%
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: %kernel.debug%
+    form:
+        csrf_protection: false
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
+
+# Assetic Configuration
+assetic:
+    debug:          %kernel.debug%
+    use_controller: false
+    bundles:        []
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        #closure:
+        #    jar: %kernel.root_dir%/Resources/java/compiler.jar
+        #yui_css:
+        #    jar: %kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   %database_driver%
+        host:     %database_host%
+        port:     %database_port%
+        dbname:   %database_name%
+        user:     %database_user%
+        password: %database_password%
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+        # e.g. database_path: %kernel.root_dir%/data/data.db3
+        # path:     %database_path%
+
+    orm:
+        auto_generate_proxy_classes: %kernel.debug%
+        auto_mapping: true
+        
+# Doctrine Migration
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: %mailer_transport%
+    host:      %mailer_host%
+    port:      %mailer_port%
+    username:  %mailer_user%
+    password:  %mailer_password%
+    spool:     { type: memory }
+
+fos_rest:
+    disable_csrf_role: ROLE_API
+    param_fetcher_listener: true
+    view:
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=1.1', 'application/json;version=1.2']
+        view_response_listener: 'force'
+        formats:
+            xml:  false
+            json: true
+        templating_formats:
+            html: true
+    format_listener:
+        enabled: true
+        rules:
+            - { path: ^/, priorities: [ html, json, xml ], fallback_format: ~, prefer_extension: true }
+            - { path: '^/admin', stop: true }
+        media_type:
+            version_regex: '/(v|version)=(?P<version>[0-9\.]+)/'
+    exception:
+        codes:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': 404
+            'Doctrine\ORM\OptimisticLockException': HTTP_CONFLICT
+        messages:
+            'Symfony\Component\Routing\Exception\ResourceNotFoundException': true
+    allowed_methods_listener: true
+    access_denied_listener:
+        json: true
+    body_listener: true
+    routing_loader:
+            default_format: json
+    serializer:
+        serialize_null:  true
+
+fos_http_cache:
+    cache_control:
+        rules:
+            # the controls section values are used in a call to Response::setCache();
+            -
+                match:
+                    path: ^/notes
+                    methods: [GET, HEAD]
+                headers:
+                    cache_control: { public: true, max_age: 15, s_maxage: 30 }
+                    last_modified: "-1 hour"
+                    vary: [Accept-Encoding, Accept-Language]
+
+# fos_user
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Masta\UserBundle\Entity\User
+    registration:
+        form:
+            type: Masta\UserBundle\Form\RegistrationType
+    profile:
+        form:
+            type: Masta\UserBundle\Form\ProfileType
+
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        Masta\PlateFormeBundle\Entity\OAuth\Client
+    access_token_class:  Masta\PlateFormeBundle\Entity\OAuth\AccessToken
+    refresh_token_class: Masta\PlateFormeBundle\Entity\OAuth\RefreshToken
+    auth_code_class:     Masta\PlateFormeBundle\Entity\OAuth\AuthCode
+    model_manager_name:  ~ # change it to the name of your entity/document manager if you don't want to use the default one.
+    authorize:
+        form:
+            type:               fos_oauth_server_authorize
+            handler:            fos_oauth_server.authorize.form.handler.default
+            name:               fos_oauth_server_authorize_form
+            validation_groups:
+
+                # Defaults:
+                - Authorize
+                - Default
+    service:
+        storage:                fos_oauth_server.storage.default
+        user_provider:          fos_user.user_provider.username_email
+        client_manager:         fos_oauth_server.client_manager.default
+        access_token_manager:   fos_oauth_server.access_token_manager.default
+        refresh_token_manager:  fos_oauth_server.refresh_token_manager.default
+        auth_code_manager:      fos_oauth_server.auth_code_manager.default
+        options:
+           supported_scopes: ROLE_USER ROLE_ADMIN
+            # Prototype
+            #key:                []
+
+            # Example
+            # supported_scopes: string
+
+            # Changing tokens and authcode lifetime
+           access_token_lifetime: 3600
+           refresh_token_lifetime: 1209600
+           auth_code_lifetime: 30
+
+            # Token type to respond with. Currently only "Bearer" supported.
+            #token_type: string
+
+            #realm:
+
+            # Enforce redirect_uri on input for both authorize and token steps.
+            #enforce_redirect: true or false
+
+            # Enforce state to be passed in authorization (see RFC 6749, section 10.12)
+            #enforce_state: true or false
+
+
+
+jms_serializer:
+    enable_short_alias: true # controls if "serializer" service is aliased to jms_serializer.serializer service
+    handlers:
+        datetime:
+            default_format: "c" # ISO8601
+            default_timezone: "UTC" # defaults to whatever timezone set in php.ini or via date_default_timezone_set
+
+    property_naming:
+        separator:  _
+        lower_case: true
+
+    metadata:
+        cache: file
+        debug: "%kernel.debug%"
+        file_cache:
+            dir: "%kernel.cache_dir%/serializer"
+
+                # Using auto-detection, the mapping files for each bundle will be
+                # expected in the Resources/config/serializer directory.
+                #
+                # Example:
+                # class: My\FooBundle\Entity\User
+                # expected path: @MyFooBundle/Resources/config/serializer/Entity.User.(yml|xml|php)
+        auto_detection: true
+
+                # if you don't want to use auto-detection, you can also define the
+                # namespace prefix and the corresponding directory explicitly
+        directories:
+            FOSUB:
+                namespace_prefix: "FOS\\UserBundle"
+                path: "%kernel.root_dir%/serializer/FOSUB"
+            #MASTAUB:
+                #namespace_prefix: "Masta\\UserBundle"
+                #path: "@MastaUserBundle/Resources/config/serializer"
+            #MASTAPF:
+                #namespace_prefix: "Masta\\PlateFormeBundle"
+                #path: "@MastaPlateFormeBundle/Resources/config/serializer"
+
+    visitors:
+        json:
+            options: 0 # json_encode options bitmask
+        xml:
+            doctype_whitelist:
+                - '<!DOCTYPE authorized SYSTEM "http://some_url">' # an authorized document type for xml deserialization
+
+nelmio_api_doc: ~
+
+vich_uploader:
+    db_driver: orm
+    mappings:
+        product_images:
+            uri_prefix:         %app.path.product_images%
+            upload_destination: %kernel.root_dir%/../web/uploads/images/products
+hwi_oauth:
+    connect:
+        account_connector: my_user_provider
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [secured_area]
+    fosub:
+        username_iterations: 30
+        properties:
+            facebook:    facebook_id
+            google:      google_id
+    resource_owners:
+        facebook:
+            type:          facebook
+            client_id:     <client_id>
+            client_secret: <client_secret>
+            scope:         "email"
+            options:
+                display: popup #dialog is optimized for popup window
+        google:
+            type:                google
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            scope:               "https://www.googleapis.com/auth/plus.login"
+            options:
+                request_visible_actions: "http://schemas.google.com/AddActivity http://schemas.google.com/CommentActivity"
+
+nelmio_cors:
+    defaults:
+        allow_credentials: true
+        allow_origin: []
+        allow_headers: []
+        allow_methods: []
+        expose_headers: []
+        max_age: 0
+        hosts: []
+        origin_regex: false
+    paths:
+        '^/api/':
+            allow_origin: ['*']
+            allow_headers: ['X-Custom-Auth','Content-Type','X-Requested-With','Accept','Origin','Access-Control-Request-Method','Access-Control-Request-Headers','Authorization']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+            max_age: 3600
+        '^/':
+            origin_regex: true
+            allow_origin: ['^http://localhost:[0-9]+',]
+            allow_headers: ['X-Custom-Auth']
+            allow_methods: ['POST', 'PUT', 'GET', 'DELETE']
+            max_age: 3600
+            hosts: ['^api\.']

@@ -1,0 +1,41 @@
+services:
+#    masta_plate_forme.example:
+#        class: Masta\PlateFormeBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+  masta_plateforme.beta.html_adder:
+    class: Masta\PlateFormeBundle\Utils\Beta\BetaHTMLAdder
+
+  masta_plateforme.beta.listener:
+    class: Masta\PlateFormeBundle\Utils\Beta\BetaListener
+    arguments:
+      - "@masta_plateforme.beta.html_adder"
+      - "2016-08-01"
+    tags:
+      - { name: kernel.event_listener, event: kernel.response, method: processBeta }
+
+  masta_plateforme.oauth_event_listener:
+      class: Masta\PlateFormeBundle\EventListener\OAuthEventListener
+      tags:
+          - { name: kernel.event_listener, event: fos_oauth_server.pre_authorization_process, method: onPreAuthorizationProcess }
+          - { name: kernel.event_listener, event: fos_oauth_server.post_authorization_process, method: onPostAuthorizationProcess }
+
+  masta_plateforme.notificator:
+    class: Masta\PlateFormeBundle\Utils\Notification\Notificator
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@security.token_storage"
+      - "@swiftmailer.mailer"
+  
+  masta_plateforme.viewor:
+    class: Masta\PlateFormeBundle\Utils\Product\Viewor
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@security.token_storage"
+
+  masta_plateforme.checkor:
+    class: Masta\PlateFormeBundle\Utils\Checking\Checkor
+    arguments:
+      - "@security.token_storage"
+
+  

@@ -1,0 +1,10 @@
+Masta\UserBundle\Entity\Country:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        name:
+            expose : true
+        indicative :
+            expose : true
+

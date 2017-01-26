@@ -1,0 +1,43 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{{ form_start(form, {'method': 'post', 'action': path('fos_user_registration_register'), 'attr': {'class': 'form-horizontal fos_user_registration_register'}}) }}
+	<div>
+    	{{ form_label(form.fullName, "Nom Complet") }}
+			{{ form_errors(form.fullName) }}
+			{{ form_widget(form.fullName,{'attr': {'class': 'form-control'}})  }}
+
+    		{{ form_label(form.username) }}
+			{{ form_errors(form.username) }}
+			{{ form_widget(form.username, {'attr': {'class': 'form-control'}})  }}
+
+    		{{ form_label(form.email) }}
+			{{ form_errors(form.email) }}
+			{{ form_widget(form.email, {'attr': {'class': 'form-control'}})  }}
+
+			{{ form_label(form.country, "Pays")}}
+			{{ form_errors(form.country) }}
+			{{ form_widget(form.country, {'attr': {'class': 'form-control'}})  }}
+
+			{{ form_label(form.location , "Ville") }}
+			{{ form_errors(form.location) }}
+			{{ form_widget(form.location, {'attr': {'class': 'form-control'}})  }}
+
+    	{{ form_label(form.plainPassword.first) }}
+			{{ form_errors(form.plainPassword.first) }}
+			{{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}})  }}
+
+    	{{ form_label(form.plainPassword.second) }}
+			{{ form_errors(form.plainPassword.second) }}
+			{{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}})  }}
+
+
+
+    </div>
+    <div >
+       <p>
+        <input type="submit" value="Inscription" class="btn btn-success pull-right"/>
+        <a class="btn btn-link pull-" href="{{path('fos_user_security_login')}}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+        </p>
+    </div>
+    {{ form_rest(form) }}
+{{ form_end(form) }}

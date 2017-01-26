@@ -1,0 +1,97 @@
+#pictures
+pictures:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Picture\PictureController
+    prefix:   /picture
+    options:
+        expose: true
+
+#categories
+categories:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Category\CategoryController
+    prefix:   /category
+    options:
+        expose: true
+
+category_follower:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Category\CategoryFollowerController
+    prefix:   /category_follow
+    options:
+        expose: true
+
+#albums
+albums:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Album\AlbumController
+    prefix:   /album
+    options:
+        expose: true
+
+#notification
+notifications:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Notification\NotificationController
+    prefix:   /notification
+    options:
+        expose: true
+
+#repots
+reports:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Report\ReportController
+    prefix:   /report
+    options:
+        expose: true
+
+#products
+products:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Product\ProductController
+    prefix:   /product
+    options:
+        expose: true
+
+product_votes:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Product\ProductVoteController
+    prefix:   /product
+    options:
+        expose: true
+
+product_views:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Product\ProductViewController
+    prefix:   /product
+    options:
+        expose: true
+
+product_pictures:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Product\ProductPictureController
+    prefix:   /product
+    options:
+        expose: true
+
+
+deals:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Deal\DealController
+    prefix:   /deal
+    options:
+        expose: true
+
+deal_conversations:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Deal\ConversationController
+    prefix:   /deal/conversation
+    options:
+        expose: true
+
+deal_messages:
+    type:     rest
+    resource: Masta\PlateFormeBundle\Controller\Deal\MessageController
+    prefix:   /deal/message
+    options:
+        expose: true

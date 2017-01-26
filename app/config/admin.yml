@@ -1,0 +1,78 @@
+easy_admin:
+    site_name: 'mapket <em style="font-size: 80%;">inc.</em>'
+    design:
+        brand_color: 'rgba(26, 188, 156, 0.85)'
+        menu:
+            - { label: 'Public Homepage', route: 'masta_core_homepage', icon:'home' }
+            - { entity: 'Stat', icon: 'list',label: 'Stats' }
+            - { entity: 'Country', icon: 'eye', label: 'Country'}
+            - { entity: 'City', icon: 'eye', label: 'Cities'}
+            - { entity: 'Category', icon: 'tag', label: 'Categories' }
+            - { entity: 'CategoryFollower', icon: 'tag ', label: 'Category Followers' }
+            - { entity: 'User', icon: 'user',label: 'Users' }
+            - { entity: 'Follower', icon: 'users', label: 'Followers' }
+            - { entity: 'Album', icon: 'users', label: 'Albums' }
+            - { entity: 'Picture', icon: 'image', label: 'Pictures' }
+            - { entity: 'Product', icon: 'image', label: 'Produts' }
+            - { entity: 'ProductVote', icon: 'heart', label: 'Product Votes' }
+            - { entity: 'ProductView', icon: 'eye', label: 'Product Views'}
+            - { entity: 'AuthClient', icon: 'eye', label: 'Auth Clients'}
+            - { entity: 'AccessToken', icon: 'eye', label: 'Access Tokens'}
+            - { entity: 'AuthCode', icon: 'eye', label: 'Auth Codes'}
+            - { entity: 'RefreshToken', icon: 'eye', label: 'RefreshToken'}
+
+    entities:
+        Stat:
+            class: Masta\PlateFormeBundle\Entity\Stat\Stat
+        Country:
+            class: Masta\UserBundle\Entity\Country
+        City:
+            class: Masta\UserBundle\Entity\City
+        Category:
+            class: Masta\PlateFormeBundle\Entity\Category\Category
+        CategoryFollower:
+            class: Masta\PlateFormeBundle\Entity\Category\CategoryFollower
+        User:
+            class: Masta\UserBundle\Entity\User
+            list:
+                title: "User list"
+                fields: ['id', 'username', 'email', 'lastLogin', 'enabled', 'locked']
+                actions: ['show']
+            form:
+                fields:
+                    - { property: 'username' }
+                    - { property: 'email', type: 'email' }
+                    - { property: 'plainPassword', type: 'password', label: 'Password', help: 'Passwords must have at least 8 characters' }
+                    - { property: 'enabled', type: 'checkbox' }
+                    - { property: 'locked', type: 'checkbox' }
+        Follower:
+            class: Masta\UserBundle\Entity\Follower
+        Album:
+            class: Masta\PlateFormeBundle\Entity\Album\Album
+        Picture:
+            class: Masta\PlateFormeBundle\Entity\Picture\Picture
+        Product:
+            class: Masta\PlateFormeBundle\Entity\Product\Product
+            form:
+                fields:
+                    - { property: 'author' }
+                    - { property: 'description',type: textarea }
+                    - { property: 'price', type: 'number' }
+                    - { property: 'album' }
+                    - { property: 'location', type: 'text' }
+                    - { property: 'is_blocked', type: 'checkbox' }
+        ProductVote:
+            class: Masta\PlateFormeBundle\Entity\Product\ProductVote
+        ProductView:
+            class: Masta\PlateFormeBundle\Entity\Product\ProductView
+
+        AuthClient:
+            class: Masta\PlateFormeBundle\Entity\OAuth\Client
+        AccessToken:
+            class: Masta\PlateFormeBundle\Entity\OAuth\AccessToken
+        AuthCode:
+            class: Masta\PlateFormeBundle\Entity\OAuth\AuthCode
+        RefreshToken:
+            class: Masta\PlateFormeBundle\Entity\OAuth\RefreshToken
+
+

@@ -1,0 +1,18 @@
+masta_plate_forme:
+    resource: "@MastaPlateFormeBundle/Resources/config/routing.yml"
+
+masta_user:
+    resource: "@MastaUserBundle/Resources/config/routing.yml"
+    prefix:   /user
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /doc
+
+
+#FOSAUTH
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
+
+fos_oauth_server_authorize:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/authorize.xml"

@@ -1,0 +1,17 @@
+Masta\PlateFormeBundle\Entity\Deal\Deal:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        content:
+            expose : true
+        publishedAt:
+            expose : true
+        thread :
+            expose : true
+        isSeen :
+            expose : true
+        author :
+            expose : true
+        isAuthor :
+            expose : true
