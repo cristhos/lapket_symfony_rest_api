@@ -2,9 +2,6 @@ parameters:
     my_user_provider.class: Masta\UserBundle\Security\Core\User\FOSUBUserProvider
 
 services:
-#    masta_user.example:
-#        class: Masta\UserBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
     masta_user.password_resetting:
         class: Masta\UserBundle\EventListener\PasswordResettingListener
         arguments: [@router]
@@ -25,3 +22,9 @@ services:
         class: "%my_user_provider.class%"
         #this is the place where the properties are passed to the UserProvider - see config.yml
         arguments: [@fos_user.user_manager,{facebook: facebook_id, twitter: twitter_id, google: google_id}]
+    
+    masta_plateforme.oauth_event_listener:
+      class: Masta\UserBundle\EventListener\OAuthEventListener
+      tags:
+          - { name: kernel.event_listener, event: fos_oauth_server.pre_authorization_process, method: onPreAuthorizationProcess }
+          - { name: kernel.event_listener, event: fos_oauth_server.post_authorization_process, method: onPostAuthorizationProcess }

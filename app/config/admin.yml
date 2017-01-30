@@ -67,12 +67,12 @@ easy_admin:
             class: Masta\PlateFormeBundle\Entity\Product\ProductView
 
         AuthClient:
-            class: Masta\PlateFormeBundle\Entity\OAuth\Client
+            class: Masta\UserBundle\Entity\OAuth\Client
         AccessToken:
-            class: Masta\PlateFormeBundle\Entity\OAuth\AccessToken
+            class: Masta\UserBundle\Entity\OAuth\AccessToken
         AuthCode:
-            class: Masta\PlateFormeBundle\Entity\OAuth\AuthCode
+            class: Masta\UserBundle\Entity\OAuth\AuthCode
         RefreshToken:
-            class: Masta\PlateFormeBundle\Entity\OAuth\RefreshToken
+            class: Masta\UserBundle\Entity\OAuth\RefreshToken
 
 

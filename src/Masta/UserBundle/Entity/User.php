@@ -300,12 +300,6 @@ class User extends BaseUser
      */
     private $receivedMessages;
 
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\OAuth\Client")
-     */
-    protected $client;
-
     /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Stat\Stat", inversedBy="users")
      */
@@ -336,6 +330,8 @@ class User extends BaseUser
         $this->sendMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
         $this->conversations = new ArrayCollection();
+        $this->clients = new ArrayCollection();
+
     }
 
     //Verification function
@@ -1495,29 +1491,5 @@ class User extends BaseUser
     public function getStat()
     {
         return $this->stat;
-    }
-
-    /**
-     * Set client
-     *
-     * @param \Masta\PlateFormeBundle\Entity\OAuth\Client $client
-     *
-     * @return User
-     */
-    public function setClient(\Masta\PlateFormeBundle\Entity\OAuth\Client $client = null)
-    {
-        $this->client = $client;
-
-        return $this;
-    }
-
-    /**
-     * Get client
-     *
-     * @return \Masta\PlateFormeBundle\Entity\OAuth\Client
-     */
-    public function getClient()
-    {
-        return $this->client;
     }
 }

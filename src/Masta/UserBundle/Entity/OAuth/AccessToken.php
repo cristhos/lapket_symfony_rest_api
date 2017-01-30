@@ -1,14 +1,14 @@
 <?php
-namespace Masta\PlateFormeBundle\Entity\OAuth;
+namespace Masta\UserBundle\Entity\OAuth;
 
-use FOS\OAuthServerBundle\Entity\RefreshToken as BaseRefreshToken;
+use FOS\OAuthServerBundle\Entity\AccessToken as BaseAccessToken;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Table("oauth2_refresh_tokens")
+ * @ORM\Table("oauth2_access_tokens")
  * @ORM\Entity
  */
-class RefreshToken extends BaseRefreshToken
+class AccessToken extends BaseAccessToken
 {
     /**
      * @ORM\Id

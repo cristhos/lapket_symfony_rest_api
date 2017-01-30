@@ -261,7 +261,7 @@ class User extends BaseUser
     /**
      * @ORM\OneToMany(
      *      targetEntity="Masta\PlateFormeBundle\Entity\Notification\Notification",
-     *      mappedBy="author",
+     *      mappedBy="destinator",
      *      orphanRemoval=true
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
@@ -300,11 +300,14 @@ class User extends BaseUser
      */
     private $receivedMessages;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\OAuth\Client")
+     * @ORM\OneToMany(
+     *      targetEntity="Masta\UserBundle\Entity\OAuth\Client",
+     *      mappedBy="user",
+     *      orphanRemoval=true
+     * )
      */
-    protected $client;
+    private $clients;
 
     /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Stat\Stat", inversedBy="users")
@@ -1495,5 +1498,39 @@ class User extends BaseUser
     public function getStat()
     {
         return $this->stat;
+    }
+
+    /**
+     * Add client
+     *
+     * @param \Masta\UserBundle\Entity\OAuth\Client $client
+     *
+     * @return User
+     */
+    public function addClient(\Masta\UserBundle\Entity\OAuth\Client $client)
+    {
+        $this->clients[] = $client;
+
+        return $this;
+    }
+
+    /**
+     * Remove client
+     *
+     * @param \Masta\UserBundle\Entity\OAuth\Client $client
+     */
+    public function removeClient(\Masta\UserBundle\Entity\OAuth\Client $client)
+    {
+        $this->clients->removeElement($client);
+    }
+
+    /**
+     * Get clients
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getClients()
+    {
+        return $this->clients;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Masta\PlateFormeBundle\EventListener;
+namespace Masta\UserBundle\EventListener;
 
 use FOS\OAuthServerBundle\Event\OAuthEvent;
 

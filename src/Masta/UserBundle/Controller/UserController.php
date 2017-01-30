@@ -22,6 +22,7 @@ use Hateoas\Configuration\Route;
 
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 
 
@@ -98,7 +99,6 @@ class UserController extends FOSRestController
 
       $user = $this->get('security.token_storage')->getToken()->getUser();
 
-
       //checking array()
       $this->container->get('masta_plateforme.checkor')->checkUser($user);
       $view = View::create();
@@ -151,7 +151,7 @@ class UserController extends FOSRestController
         $username = $request->get('username');
         $password = $request->get('password');
 
-        $email_exist = $userManager->findUserByEmail($email);
+        $email_exist = $userManager->findUserByUsernameOrEmail($email);
         $username_exist = $userManager->findUserByUsername($username);
 
         $user = new User();
@@ -362,6 +362,51 @@ class UserController extends FOSRestController
       $view = View::create();
       $view->setData($response)->setStatusCode(200);
       return $view;
+    }
+
+    /**
+     * Password Resetting Request.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     201 = "Returned when a new resource is created",
+     *     204 = "Returned when successful",
+     *     400 = "Returned when the form has errors"
+     *   }
+     * )
+     *
+     * @param Request $request the request object
+     *
+     * @return array
+     *
+     * @throws AccessDeniedException
+     */
+    public function resetPasswordRequestAction(Request $request)
+    {
+        $slug = $request->query->get('slug');
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $userManager->findUserByUsernameOrEmail($slug);
+
+        if (null === $user) {
+            throw $this->createNotFoundException();
+        }
+
+        if ($user->isPasswordRequestNonExpired($this->container->getParameter('fos_user.resetting.token_ttl'))) {
+            throw new BadRequestHttpException('Password request alerady requested');
+        }
+
+        if (null === $user->getConfirmationToken()) {
+            /** @var $tokenGenerator \FOS\UserBundle\Util\TokenGeneratorInterface */
+            $tokenGenerator = $this->get('fos_user.util.token_generator');
+            $user->setConfirmationToken($tokenGenerator->generateToken());
+        }
+
+        $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        $user->setPasswordRequestedAt(new \DateTime());
+        $this->get('fos_user.user_manager')->updateUser($user);
+
+        return new Response(Response::HTTP_OK);
     }
 
     /**

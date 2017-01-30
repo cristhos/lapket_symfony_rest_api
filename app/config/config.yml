@@ -143,10 +143,10 @@ fos_user:
 
 fos_oauth_server:
     db_driver:           orm
-    client_class:        Masta\PlateFormeBundle\Entity\OAuth\Client
-    access_token_class:  Masta\PlateFormeBundle\Entity\OAuth\AccessToken
-    refresh_token_class: Masta\PlateFormeBundle\Entity\OAuth\RefreshToken
-    auth_code_class:     Masta\PlateFormeBundle\Entity\OAuth\AuthCode
+    client_class:        Masta\UserBundle\Entity\OAuth\Client
+    access_token_class:  Masta\UserBundle\Entity\OAuth\AccessToken
+    refresh_token_class: Masta\UserBundle\Entity\OAuth\RefreshToken
+    auth_code_class:     Masta\UserBundle\Entity\OAuth\AuthCode
     model_manager_name:  ~ # change it to the name of your entity/document manager if you don't want to use the default one.
     authorize:
         form:
@@ -174,7 +174,7 @@ fos_oauth_server:
             # supported_scopes: string
 
             # Changing tokens and authcode lifetime
-           access_token_lifetime: 3600
+           access_token_lifetime: 120
            refresh_token_lifetime: 1209600
            auth_code_lifetime: 30
 
