@@ -7,7 +7,7 @@ Masta\PlateFormeBundle\Entity\Category\Category:
             expose : true
         publishedAt:
             expose : true
-        nbAlbums :
+        nbProducts :
             expose : true
         nbFollowers :
             expose : true

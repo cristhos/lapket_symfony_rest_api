@@ -55,19 +55,19 @@ class Category
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_albums", type="integer",nullable=true)
+     * @ORM\Column(name="nb_products", type="integer",nullable=true)
      */
-    private $nbAlbums;
+    private $nbProduts=0;
 
     /**
      * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Album\Album",
+     *      targetEntity="Masta\PlateFormeBundle\Entity\Product\Product",
      *      mappedBy="category",
      *      orphanRemoval=true
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $albums;
+    private $products;
 
     /**
      * @var integer
@@ -108,7 +108,7 @@ class Category
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
-        $this->albums = new ArrayCollection();
+        $this->products = new ArrayCollection();
         $this->categoryFollowers = new ArrayCollection();
     }
 
@@ -136,20 +136,36 @@ class Category
     public function ranking()
     {
         $nb_total_categories = $this->getStat()->getNbCategories();
-        $nb_total_albums = $this->getStat()->getNbAlbums();
+        $nb_total_products = $this->getStat()->getNbProducts();
         $nb_total_users = $this->getStat()->getNbUsers();
         
         $nb_followers = $this->getNbFollowers();
-        $nb_albums = $this->getNbAlbums();
+        $nb_products = $this->getNbProducts();
 
-        $category_probability = 1/$nb_total_categories; 
-        $album_probability = 1/$nb_albums;
-        $follower_probability = 1/$nb_total_users;
 
-        $album_fc = $nb_albums/$nb_total_albums;
-        $follower_fc = $nb_followers/$nb_total_users;  
+        if($nb_total_categories>0)
+            $category_probability = 1/$nb_total_categories; 
+        else
+            $category_probability =0;
 
-        $rank = (($album_fc*$album_probability)+($follower_fc*$album_probability)+($album_fc*$category_probability)+($follower_fc*$category_probability));
+        if($nb_products>0)
+            $product_probability = 1/$nb_products;
+        else
+            $product_probability = 0;
+
+        if($nb_total_product)
+            $product_fc = $nb_product/$nb_total_products;
+        else
+            $product_fc=0;
+
+        if($nb_total_users)
+            $follower_fc = $nb_followers/$nb_total_users; 
+        else
+            $follower_fc=0;
+         
+
+        $rank = ($product_fc*$product_probability)+($product_fc*$category_probability)+
+        ($follower_fc*$product_probability)+($follower_fc*$category_probability);
         return $rank;
     }
 
@@ -173,249 +189,22 @@ class Category
         $this->setRank($this->ranking());
     }
 
-
     /**
-     * Get id
-     *
-     * @return integer
+     * @ORM\PrePersist
      */
-    public function getId()
+    public function increase()
     {
-        return $this->id;
+      $compteur = $this->getStat()->getCategories()->count();
+      $this->getStat()->setNbCategories($compteur+1);
+    }
+    
+    /**
+     * @ORM\PreRemove
+     */
+    public function decrease()
+    {
+      $compteur = $this->getStat()->getCategories()->count();
+      $this->getStat()->setNbCategories($compteur-1);
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Category
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set publishedAt
-     *
-     * @param \DateTime $publishedAt
-     *
-     * @return Category
-     */
-    public function setPublishedAt($publishedAt)
-    {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get publishedAt
-     *
-     * @return \DateTime
-     */
-    public function getPublishedAt()
-    {
-        return $this->publishedAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Category
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Set nbAlbums
-     *
-     * @param integer $nbAlbums
-     *
-     * @return Category
-     */
-    public function setNbAlbums($nbAlbums)
-    {
-        $this->nbAlbums = $nbAlbums;
-
-        return $this;
-    }
-
-    /**
-     * Get nbAlbums
-     *
-     * @return integer
-     */
-    public function getNbAlbums()
-    {
-        return $this->nbAlbums;
-    }
-
-    /**
-     * Set nbFollowers
-     *
-     * @param integer $nbFollowers
-     *
-     * @return Category
-     */
-    public function setNbFollowers($nbFollowers)
-    {
-        $this->nbFollowers = $nbFollowers;
-
-        return $this;
-    }
-
-    /**
-     * Get nbFollowers
-     *
-     * @return integer
-     */
-    public function getNbFollowers()
-    {
-        return $this->nbFollowers;
-    }
-
-    /**
-     * Add album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
-     *
-     * @return Category
-     */
-    public function addAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
-    {
-        $this->albums[] = $album;
-
-        return $this;
-    }
-
-    /**
-     * Remove album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
-     */
-    public function removeAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
-    {
-        $this->albums->removeElement($album);
-    }
-
-    /**
-     * Get albums
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAlbums()
-    {
-        return $this->albums;
-    }
-
-    /**
-     * Add categoryFollower
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Category\CategoryFollower $categoryFollower
-     *
-     * @return Category
-     */
-    public function addCategoryFollower(\Masta\PlateFormeBundle\Entity\Category\CategoryFollower $categoryFollower)
-    {
-        $this->categoryFollowers[] = $categoryFollower;
-
-        return $this;
-    }
-
-    /**
-     * Remove categoryFollower
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Category\CategoryFollower $categoryFollower
-     */
-    public function removeCategoryFollower(\Masta\PlateFormeBundle\Entity\Category\CategoryFollower $categoryFollower)
-    {
-        $this->categoryFollowers->removeElement($categoryFollower);
-    }
-
-    /**
-     * Get categoryFollowers
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategoryFollowers()
-    {
-        return $this->categoryFollowers;
-    }
-    /**
-     * Set isPublished
-     *
-     * @param boolean $isPublished
-     *
-     * @return Category
-     */
-    public function setIsPublished($isPublished)
-    {
-        $this->isPublished = $isPublished;
-
-        return $this;
-    }
-
-    /**
-     * Get isPublished
-     *
-     * @return boolean
-     */
-    public function getIsPublished()
-    {
-        return $this->isPublished;
-    }
-
-    /**
-     * Set rank
-     *
-     * @param string $rank
-     *
-     * @return Category
-     */
-    public function setRank($rank)
-    {
-        $this->rank = $rank;
-
-        return $this;
-    }
-
-    /**
-     * Get rank
-     *
-     * @return string
-     */
-    public function getRank()
-    {
-        return $this->rank;
-    }
 }

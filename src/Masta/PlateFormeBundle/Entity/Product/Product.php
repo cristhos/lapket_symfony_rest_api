@@ -25,13 +25,6 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=30)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
@@ -137,9 +130,9 @@ class Product
 
 
     /**
-     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Album\Album", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Category\Category", inversedBy="products")
      */
-    private $album;
+    private $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="Masta\UserBundle\Entity\User", inversedBy="products")
@@ -192,8 +185,8 @@ class Product
       $compteur = $this->getAuthor()->getProducts()->count();
       $this->getAuthor()->setNbProducts($compteur+1);
       
-      $compteur = $this->getAlbum()->getProducts()->count();
-      $this->getAlbum()->setNbProducts($compteur+1);
+      $compteur = $this->getCategory()->getProducts()->count();
+      $this->getCategory()->setNbProducts($compteur+1);
     }
 
     /**
@@ -207,8 +200,8 @@ class Product
       $compteur = $this->getAuthor()->getProducts()->count();
       $this->getAuthor()->setNbProducts($compteur-1);
       
-      $compteur = $this->getAlbum()->getProducts()->count();
-      $this->getAlbum()->setNbProducts($compteur-1);
+      $compteur = $this->getCategory()->getProducts()->count();
+      $this->getCategory()->setNbProducts($compteur-1);
      
     }
 
@@ -256,7 +249,7 @@ class Product
  
      public function ranking()
      {
-         $album_rank = $this->getAlbum()->getRank();
+         $category_rank = $this->getCategory()->getRank();
          $user_rank = $this->getAuthor()->getRank();
 
          $nb_total_products = $this->getStat()->getNbProducts();
@@ -271,17 +264,13 @@ class Product
          $vote_fc= $nb_product_votes/$nb_product_views;
          $conversation_fc = $nb_product_conversations/$nb_product_views;
 
-        $rank=($vote_fc*$vote_probability)+($conversation_fc*$conversation_probability)+($vote_fc*$album_rank)
-              +($vote_fc*$user_rank)+($conversation_fc*$user_rank)+($conversation_fc*$album_rank)+($conversation_fc*$product_probability)+($conversation_fc*$product_probability);
+        $rank=($vote_fc*$vote_probability)+($conversation_fc*$conversation_probability)+($vote_fc*$category_rank)
+              +($vote_fc*$user_rank)+($conversation_fc*$user_rank)+($conversation_fc*$category_rank)+($conversation_fc*$product_probability)+($conversation_fc*$product_probability);
               
         return $rank;
      }
 
      //end function special
-
-
-
-    
 
     /**
      * Get id
@@ -291,30 +280,6 @@ class Product
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Product
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -640,6 +605,40 @@ class Product
     }
 
     /**
+     * Add productConversation
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
+     *
+     * @return Product
+     */
+    public function addProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
+    {
+        $this->productConversations[] = $productConversation;
+
+        return $this;
+    }
+
+    /**
+     * Remove productConversation
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
+     */
+    public function removeProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
+    {
+        $this->productConversations->removeElement($productConversation);
+    }
+
+    /**
+     * Get productConversations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProductConversations()
+    {
+        return $this->productConversations;
+    }
+
+    /**
      * Add productView
      *
      * @param \Masta\PlateFormeBundle\Entity\Product\ProductView $productView
@@ -674,27 +673,27 @@ class Product
     }
 
     /**
-     * Set album
+     * Set category
      *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
+     * @param \Masta\PlateFormeBundle\Entity\Category\Category $category
      *
      * @return Product
      */
-    public function setAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album = null)
+    public function setCategory(\Masta\PlateFormeBundle\Entity\Category\Category $category = null)
     {
-        $this->album = $album;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Get album
+     * Get category
      *
-     * @return \Masta\PlateFormeBundle\Entity\Album\Album
+     * @return \Masta\PlateFormeBundle\Entity\Category\Category
      */
-    public function getAlbum()
+    public function getCategory()
     {
-        return $this->album;
+        return $this->category;
     }
 
     /**
@@ -743,39 +742,5 @@ class Product
     public function getStat()
     {
         return $this->stat;
-    }
-
-    /**
-     * Add productConversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
-     *
-     * @return Product
-     */
-    public function addProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
-    {
-        $this->productConversations[] = $productConversation;
-
-        return $this;
-    }
-
-    /**
-     * Remove productConversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
-     */
-    public function removeProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
-    {
-        $this->productConversations->removeElement($productConversation);
-    }
-
-    /**
-     * Get productConversations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductConversations()
-    {
-        return $this->productConversations;
     }
 }

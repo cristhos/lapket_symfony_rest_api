@@ -35,8 +35,6 @@ Masta\UserBundle\Entity\User:
             expose : true
         nbCategoryFollows:
             expose : true
-        nbAlbums :
-            expose : true
         nbNotifications:
             expose : true
         nbReceivedMessages:

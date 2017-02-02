@@ -100,15 +100,16 @@ class Notificator
         if($notification->getIsSeen() == false)
         {
             $notification->setIsSeen(true);
-          
+            $this->em->persist($notification);
+            $this->em->flush();
+
             $destinator = $notification->getDestinator();
             $compteur = $destinator->getNotifications()->count();
             $destinator->setNbNotifications($compteur - 1);
-            $detinatorupdate = $destinator;
-            
-            $notification->setDestinator($destinator);
-            $this->em->persist($notification);
+            $this->em->persist($destinator);
             $this->em->flush();
+
+
         }
     }   
   }

@@ -15,6 +15,7 @@ services:
       - default
     dns_search:
       - db
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     ports:
@@ -67,12 +68,10 @@ services:
     volumes_from:
       - php
       - nginx
-   networks:
+    networks:
       - default
     dns_search:
       - engine
-
-
 
 volumes:
   db: {}

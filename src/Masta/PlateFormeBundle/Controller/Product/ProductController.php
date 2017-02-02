@@ -5,7 +5,7 @@ namespace Masta\PlateFormeBundle\Controller\Product;
 use Masta\PlateFormeBundle\Form\Product\ProductType;
 use Masta\PlateFormeBundle\Entity\Product\Product;
 use Masta\PlateFormeBundle\Entity\Product\ProductPicture;
-use Masta\PlateFormeBundle\Entity\Album\Album;
+use Masta\PlateFormeBundle\Entity\Category\Category;
 use Masta\PlateFormeBundle\Entity\Picture\Picture;
 
 use FOS\RestBundle\Controller\Annotations;
@@ -121,48 +121,6 @@ class ProductController extends FOSRestController
         );
     }
 
-    /**
-     * List prodroducts by album.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     *
-     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many products to return.")
-     * @Annotations\QueryParam(name="page", requirements="\d+", nullable=true, description="Page from which to start listing products.")
-     *
-     * @Annotations\View()
-     *
-     * @param Request               $request      the request object
-     * @param int                   $album_id      the album id
-     *
-     * @return array
-     */
-    public function getProductsAlbumAction(Request $request,$album_id)
-    {
-        $user = $this->getUser();
-        $limit = $request->query->getInt('limit', 12);
-        $page = $request->query->getInt('page', 1);
-
-
-        $em = $this->getDoctrine()->getManager();
-        $productsPager = $em->getRepository('MastaPlateFormeBundle:Product\Product')->getProductsByAlbum($limit, $page,$album_id);
-
-        $pagerFactory = new PagerfantaFactory();
-
-        //checking
-        $this->container->get('masta_plateforme.checkor')->checkProducts($productsPager);
-
-        return $pagerFactory->createRepresentation(
-            $productsPager,
-            new Route('get_products_album', array('limit' => $limit,'page' => $page,'album_id' => $album_id))
-        );
-    }
-
-
         /**
          * List prodroducts by cagegory.
          *
@@ -179,7 +137,7 @@ class ProductController extends FOSRestController
          * @Annotations\View()
          *
          * @param Request               $request      the request object
-         * @param int                   $album_id      the album id
+         * @param int                   $category_id      the category id
          *
          * @return array
          */
@@ -206,46 +164,6 @@ class ProductController extends FOSRestController
         }
 
 
-    /**
-     * short List prodroducts by album.
-     *
-     * @ApiDoc(
-     *   resource = true,
-     *   statusCodes = {
-     *     200 = "Returned when successful"
-     *   }
-     * )
-     *
-     * @Annotations\QueryParam(name="limit", requirements="\d+", default="5", description="How many products to return.")
-     * @Annotations\QueryParam(name="page", requirements="\d+", nullable=true, description="Page from which to start listing products.")
-     *
-     * @Annotations\View()
-     *
-     * @param Request               $request      the request object
-     * @param int                   $album_id      the album id
-     *
-     * @return array
-     */
-    public function getShortProductsAlbumAction(Request $request,$album_id)
-    {
-        $user = $this->getUser();
-        $limit = $request->query->getInt('limit', 2);
-        $page = $request->query->getInt('page', 1);
-
-
-        $em = $this->getDoctrine()->getManager();
-        $productsPager = $em->getRepository('MastaPlateFormeBundle:Product\Product')->getProductsByAlbum($limit, $page,$album_id);
-
-        $pagerFactory = new PagerfantaFactory();
-
-        //checking array()
-        $this->container->get('masta_plateforme.checkor')->checkProducts($productsPager);
-
-        return $pagerFactory->createRepresentation(
-            $productsPager,
-            new Route('get_products_album', array('limit' => $limit,'page' => $page,'album_id' => $album_id))
-        );
-    }
 
     /**
      * List products by author.
@@ -469,7 +387,6 @@ class ProductController extends FOSRestController
      * )
      *
      * @param Request $request the request object
-     * @param Request $album   convert id to Album object
      *
      * @return View
      */
@@ -481,19 +398,17 @@ class ProductController extends FOSRestController
         $em = $this->getDoctrine()->getManager(); 
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $name = $request->get('name');
         $description = $request->get('description');
         $price = $request->get('price');
         $picture = $em->getRepository('MastaPlateFormeBundle:Picture\Picture')->find($request->get('picture'));
-        $album = $em->getRepository('MastaPlateFormeBundle:Album\Album')->find($request->get('album_id'));
+        $category = $em->getRepository('MastaPlateFormeBundle:Category\Category')->find($request->get('category_id'));
         $stat = $em->getRepository('MastaPlateFormeBundle:Stat\Stat')->findOneByName('statistique');
         
         $product = new Product();
         $product->setAuthor($user);
         $product->setDescription($description);
-        $product->setName($name);
         $product->setPrice($price);
-        $product->setAlbum($album);
+        $product->setCategory($category);
         $product->setPicture($picture);
         $product->setStat($stat);
                
@@ -555,12 +470,12 @@ class ProductController extends FOSRestController
             $product->setPicture($oldPicture);
         }
 
-        $album = $em->getRepository('MastaPlateFormeBundle:Album\Album')->find($request->get('album_id'));
+        $category = $em->getRepository('MastaPlateFormeBundle:Category\Category')->find($request->get('category_id'));
         $product->setAuthor($user);
         $product->setDescription($description);
         $product->setName($name);
         $product->setPrice($price);
-        $product->setAlbum($album);
+        $product->setCategory($category);
 
         $em->persist($product);
         $em->flush();

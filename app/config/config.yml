@@ -174,7 +174,7 @@ fos_oauth_server:
             # supported_scopes: string
 
             # Changing tokens and authcode lifetime
-           access_token_lifetime: 120
+           access_token_lifetime: 3600
            refresh_token_lifetime: 1209600
            auth_code_lifetime: 30
 

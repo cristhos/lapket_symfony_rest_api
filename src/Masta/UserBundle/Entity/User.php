@@ -134,13 +134,6 @@ class User extends BaseUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_albums", type="integer")
-     */
-    private $nbAlbums = 0;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="nb_category_follows", type="integer")
      */
     private $nbCategoryFollows = 0;
@@ -217,16 +210,6 @@ class User extends BaseUser
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
     private $categoryFollows;
-
-    /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Album\Album",
-     *      mappedBy="author",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $albums;
 
     /**
      * @ORM\OneToMany(
@@ -322,7 +305,6 @@ class User extends BaseUser
         $this->followers = new ArrayCollection();
         $this->follows = new ArrayCollection();
         $this->categoryFollows = new ArrayCollection();
-        $this->albums = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->productVotes = new ArrayCollection();
         $this->productViews = new ArrayCollection();
@@ -857,30 +839,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set nbAlbums
-     *
-     * @param integer $nbAlbums
-     *
-     * @return User
-     */
-    public function setNbAlbums($nbAlbums)
-    {
-        $this->nbAlbums = $nbAlbums;
-
-        return $this;
-    }
-
-    /**
-     * Get nbAlbums
-     *
-     * @return integer
-     */
-    public function getNbAlbums()
-    {
-        return $this->nbAlbums;
-    }
-
-    /**
      * Set nbCategoryFollows
      *
      * @param integer $nbCategoryFollows
@@ -1195,40 +1153,6 @@ class User extends BaseUser
     public function getCategoryFollows()
     {
         return $this->categoryFollows;
-    }
-
-    /**
-     * Add album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $album
-     *
-     * @return User
-     */
-    public function addAlbum(\Masta\PlateFormeBundle\Entity\Deal\Message $album)
-    {
-        $this->albums[] = $album;
-
-        return $this;
-    }
-
-    /**
-     * Remove album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $album
-     */
-    public function removeAlbum(\Masta\PlateFormeBundle\Entity\Deal\Message $album)
-    {
-        $this->albums->removeElement($album);
-    }
-
-    /**
-     * Get albums
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAlbums()
-    {
-        return $this->albums;
     }
 
     /**

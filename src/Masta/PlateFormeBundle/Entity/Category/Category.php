@@ -55,19 +55,19 @@ class Category
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_albums", type="integer",nullable=true)
+     * @ORM\Column(name="nb_products", type="integer",nullable=true)
      */
-    private $nbAlbums;
+    private $nbProducts=0;
 
     /**
      * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Album\Album",
+     *      targetEntity="Masta\PlateFormeBundle\Entity\Product\Product",
      *      mappedBy="category",
      *      orphanRemoval=true
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $albums;
+    private $products;
 
     /**
      * @var integer
@@ -108,7 +108,7 @@ class Category
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
-        $this->albums = new ArrayCollection();
+        $this->products = new ArrayCollection();
         $this->categoryFollowers = new ArrayCollection();
     }
 
@@ -136,11 +136,11 @@ class Category
     public function ranking()
     {
         $nb_total_categories = $this->getStat()->getNbCategories();
-        $nb_total_albums = $this->getStat()->getNbAlbums();
+        $nb_total_products = $this->getStat()->getNbProducts();
         $nb_total_users = $this->getStat()->getNbUsers();
         
         $nb_followers = $this->getNbFollowers();
-        $nb_albums = $this->getNbAlbums();
+        $nb_products = $this->getNbProducts();
 
 
         if($nb_total_categories>0)
@@ -148,15 +148,15 @@ class Category
         else
             $category_probability =0;
 
-        if($nb_albums>0)
-            $album_probability = 1/$nb_albums;
+        if($nb_products>0)
+            $product_probability = 1/$nb_total_products;
         else
-            $album_probability = 0;
+            $product_probability = 0;
 
-        if($nb_total_albums)
-            $album_fc = $nb_albums/$nb_total_albums;
+        if($nb_total_products)
+            $product_fc = $nb_products/$nb_total_products;
         else
-            $album_fc=0;
+            $product_fc=0;
 
         if($nb_total_users)
             $follower_fc = $nb_followers/$nb_total_users; 
@@ -164,8 +164,7 @@ class Category
             $follower_fc=0;
          
 
-        $rank = ($album_fc*$album_probability)+($album_fc*$category_probability)+
-        ($follower_fc*$album_probability)+($follower_fc*$category_probability);
+        $rank = ($product_fc*$product_probability)+($follower_fc*$category_probability);
         return $rank;
     }
 
@@ -243,6 +242,30 @@ class Category
     }
 
     /**
+     * Set isPublished
+     *
+     * @param boolean $isPublished
+     *
+     * @return Category
+     */
+    public function setIsPublished($isPublished)
+    {
+        $this->isPublished = $isPublished;
+
+        return $this;
+    }
+
+    /**
+     * Get isPublished
+     *
+     * @return boolean
+     */
+    public function getIsPublished()
+    {
+        return $this->isPublished;
+    }
+
+    /**
      * Set publishedAt
      *
      * @param \DateTime $publishedAt
@@ -291,27 +314,27 @@ class Category
     }
 
     /**
-     * Set nbAlbums
+     * Set nbProducts
      *
-     * @param integer $nbAlbums
+     * @param integer $nbProducts
      *
      * @return Category
      */
-    public function setNbAlbums($nbAlbums)
+    public function setNbProducts($nbProducts)
     {
-        $this->nbAlbums = $nbAlbums;
+        $this->nbProducts = $nbProducts;
 
         return $this;
     }
 
     /**
-     * Get nbAlbums
+     * Get nbProducts
      *
      * @return integer
      */
-    public function getNbAlbums()
+    public function getNbProducts()
     {
-        return $this->nbAlbums;
+        return $this->nbProducts;
     }
 
     /**
@@ -339,37 +362,61 @@ class Category
     }
 
     /**
-     * Add album
+     * Set rank
      *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
+     * @param string $rank
      *
      * @return Category
      */
-    public function addAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
+    public function setRank($rank)
     {
-        $this->albums[] = $album;
+        $this->rank = $rank;
 
         return $this;
     }
 
     /**
-     * Remove album
+     * Get rank
      *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
+     * @return string
      */
-    public function removeAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
+    public function getRank()
     {
-        $this->albums->removeElement($album);
+        return $this->rank;
     }
 
     /**
-     * Get albums
+     * Add product
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
+     *
+     * @return Category
+     */
+    public function addProduct(\Masta\PlateFormeBundle\Entity\Product\Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
+     */
+    public function removeProduct(\Masta\PlateFormeBundle\Entity\Product\Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAlbums()
+    public function getProducts()
     {
-        return $this->albums;
+        return $this->products;
     }
 
     /**
@@ -404,53 +451,6 @@ class Category
     public function getCategoryFollowers()
     {
         return $this->categoryFollowers;
-    }
-    /**
-     * Set isPublished
-     *
-     * @param boolean $isPublished
-     *
-     * @return Category
-     */
-    public function setIsPublished($isPublished)
-    {
-        $this->isPublished = $isPublished;
-
-        return $this;
-    }
-
-    /**
-     * Get isPublished
-     *
-     * @return boolean
-     */
-    public function getIsPublished()
-    {
-        return $this->isPublished;
-    }
-
-    /**
-     * Set rank
-     *
-     * @param string $rank
-     *
-     * @return Category
-     */
-    public function setRank($rank)
-    {
-        $this->rank = $rank;
-
-        return $this;
-    }
-
-    /**
-     * Get rank
-     *
-     * @return string
-     */
-    public function getRank()
-    {
-        return $this->rank;
     }
 
     /**

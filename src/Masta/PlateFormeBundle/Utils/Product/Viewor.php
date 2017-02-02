@@ -58,10 +58,14 @@ class Viewor
   //enregistrement de la vue
   public function persistProductView(Product $product,$user)
   {
-     $productView = new ProductView();
+      if($user instanceof User)
+      {
+           $productView = new ProductView();
       $productView->setProduct($product);
       $productView->setAuthor($user);
       $this->em->persist($productView);
       $this->em->flush();
+      }
+     
   }
 }

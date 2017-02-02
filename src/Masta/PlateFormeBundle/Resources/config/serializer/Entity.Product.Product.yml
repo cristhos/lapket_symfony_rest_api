@@ -3,8 +3,6 @@ Masta\PlateFormeBundle\Entity\Product\Product:
     properties :
         id :
             expose : true
-        name :
-            expose : true
         description :
             expose : true
         price:
@@ -25,7 +23,7 @@ Masta\PlateFormeBundle\Entity\Product\Product:
             expose : true
         isNotify :
             expose : true
-        album :
+        category :
             expose : true
         picture:
             expose : true

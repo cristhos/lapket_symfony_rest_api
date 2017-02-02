@@ -11,7 +11,6 @@ easy_admin:
             - { entity: 'CategoryFollower', icon: 'tag ', label: 'Category Followers' }
             - { entity: 'User', icon: 'user',label: 'Users' }
             - { entity: 'Follower', icon: 'users', label: 'Followers' }
-            - { entity: 'Album', icon: 'users', label: 'Albums' }
             - { entity: 'Picture', icon: 'image', label: 'Pictures' }
             - { entity: 'Product', icon: 'image', label: 'Produts' }
             - { entity: 'ProductVote', icon: 'heart', label: 'Product Votes' }
@@ -47,8 +46,6 @@ easy_admin:
                     - { property: 'locked', type: 'checkbox' }
         Follower:
             class: Masta\UserBundle\Entity\Follower
-        Album:
-            class: Masta\PlateFormeBundle\Entity\Album\Album
         Picture:
             class: Masta\PlateFormeBundle\Entity\Picture\Picture
         Product:
@@ -74,5 +71,3 @@ easy_admin:
             class: Masta\UserBundle\Entity\OAuth\AuthCode
         RefreshToken:
             class: Masta\UserBundle\Entity\OAuth\RefreshToken
-
-

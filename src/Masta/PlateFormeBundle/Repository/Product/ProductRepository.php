@@ -58,9 +58,8 @@ class ProductRepository extends EntityRepository
          */
      $queryBuilder = $this->createQueryBuilder('p')
                           ->leftJoin('p.author', 'a')->addSelect('a')
-                          ->leftJoin('p.album', 'l')->addSelect('l')
                           ->where('p.author =:author')->setParameter('author', $user)
-                          ->orWhere('l.category in(:categoryFollows)')->setParameter('categoryFollows', $categoryFollows)
+                          ->orWhere('p.category in(:categoryFollows)')->setParameter('categoryFollows', $categoryFollows)
                           ->orWhere('p.author in(:follows_a)')->setParameter('follows_a', $follows_a)
                           ->orWhere('a.city =:city')->setParameter('city', $user->getCity())
                           ->orWhere('a.country =:country')->setParameter('country', $user->getCountry())
@@ -77,28 +76,12 @@ class ProductRepository extends EntityRepository
         return $pager;
     }
 
-    public function getProductsByAlbum($limit, $page, $album_id)
-    {
-        $queryBuilder = $this->createQueryBuilder('p')
-        					 ->leftJoin('p.album', 'al')->addSelect('al')
-        					 ->where('al.id = :album_id')->setParameter('album_id', $album_id)
-        					 ->orderBy('p.publishedAt', 'DESC')
-                             ->getQuery();
-        $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
-        $pager = new Pagerfanta($pagerAdapter);
-        
-        $pager->setMaxPerPage($limit);
-        $pager->setCurrentPage($page);
-
-        return $pager;
-    }
 
     public function getProductsByCategory($limit, $page, $category_id)
     {
       $qb = $this->createQueryBuilder('p');
 
-      $qb->leftJoin('p.album', 'al')->addSelect('al')
-                 ->leftJoin('al.category', 'c')->addSelect('c')
+      $qb->leftJoin('p.category', 'c')->addSelect('c')
                  ->where('c.id = :category_id')->setParameter('category_id', $category_id)
                  ->orderBy('p.publishedAt', 'DESC')
                            ->getQuery();
@@ -132,8 +115,7 @@ class ProductRepository extends EntityRepository
     public function getProductsTerm($limit, $page, $term)
     {
         $qb = $this->createQueryBuilder('p');
-        $qb->where('p.name like :term')->setParameter('term','%'.$term.'%')
-        	->orWhere('p.description like :term')->setParameter('term','%'.$term.'%')
+        $qb->where('p.description like :term')->setParameter('term','%'.$term.'%')
             ->orderBy('p.rank', 'DESC')
             ->getQuery();
         $pagerAdapter = new DoctrineORMAdapter($qb);

@@ -127,7 +127,7 @@ class ProductVoteController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $product_id = $request->get('product_id');
         $product = $em->getRepository('MastaPlateFormeBundle:Product\Product')->findOneById($product_id);
-
+        
         //checking
         $pass = true;
         foreach($product->getVotes() as $vote)

@@ -75,13 +75,6 @@ class Stat
     /**
      * @var int
      *
-     * @ORM\Column(name="nbAlbums", type="integer")
-     */
-    private $nbAlbums=0;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="nbProducts", type="integer")
      */
     private $nbProducts=0;
@@ -139,15 +132,6 @@ class Stat
 
     /**
      * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Album\Album",
-     *      mappedBy="stat",
-     *      orphanRemoval=true
-     * )
-     */
-    private $albums;
-
-        /**
-     * @ORM\OneToMany(
      *      targetEntity="Masta\PlateFormeBundle\Entity\Product\Product",
      *      mappedBy="stat",
      *      orphanRemoval=true
@@ -165,7 +149,6 @@ class Stat
         $this->countries = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cities = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->albums = new \Doctrine\Common\Collections\ArrayCollection();
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -344,29 +327,6 @@ class Stat
         return $this->nbUsers;
     }
 
-    /**
-     * Set nbAlbums
-     *
-     * @param integer $nbAlbums
-     *
-     * @return Stat
-     */
-    public function setNbAlbums($nbAlbums)
-    {
-        $this->nbAlbums = $nbAlbums;
-
-        return $this;
-    }
-
-    /**
-     * Get nbAlbums
-     *
-     * @return integer
-     */
-    public function getNbAlbums()
-    {
-        return $this->nbAlbums;
-    }
 
     /**
      * Set nbProducts
@@ -576,39 +536,6 @@ class Stat
         return $this->categories;
     }
 
-    /**
-     * Add album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
-     *
-     * @return Stat
-     */
-    public function addAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
-    {
-        $this->albums[] = $album;
-
-        return $this;
-    }
-
-    /**
-     * Remove album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Album\Album $album
-     */
-    public function removeAlbum(\Masta\PlateFormeBundle\Entity\Album\Album $album)
-    {
-        $this->albums->removeElement($album);
-    }
-
-    /**
-     * Get albums
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAlbums()
-    {
-        return $this->albums;
-    }
 
     /**
      * Add product

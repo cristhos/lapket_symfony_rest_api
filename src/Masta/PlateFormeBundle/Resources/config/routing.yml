@@ -21,14 +21,6 @@ category_follower:
     options:
         expose: true
 
-#albums
-albums:
-    type:     rest
-    resource: Masta\PlateFormeBundle\Controller\Album\AlbumController
-    prefix:   /album
-    options:
-        expose: true
-
 #notification
 notifications:
     type:     rest
