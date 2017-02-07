@@ -15,29 +15,35 @@ class Viewor
    */
   private $em;
 
+  /**
+   * @var TokenStorageInterface
+   */
   private $tokenStorage;
 
-  // On injecte l'EntityManager
+  // injecting EntityManager an TokenStorage
   public function __construct(EntityManagerInterface $em, TokenStorageInterface $tokenStorage)
   {
     $this->em = $em;
     $this->tokenStorage = $tokenStorage;
   }
 
+  //check  array();
   public function viewIts($products){
       $user = $this->tokenStorage->getToken()->getUser();
-        if($user instanceOf User){
-             foreach ($products as $product) {
+        if($user instanceOf User)
+        {
+             foreach ($products as $product) 
+             {
                 $this->viewIt($product);
             }
         }
      
   }
 
+  //add in view list if your are not in 
   public function viewIt(Product $product)
   {
        $user = $this->tokenStorage->getToken()->getUser();
-
 
        $pass = true;
        foreach ($product->getProductViews() as $pv) 
@@ -55,16 +61,16 @@ class Viewor
        }
   }
 
-  //enregistrement de la vue
+  //persiste post view
   public function persistProductView(Product $product,$user)
   {
       if($user instanceof User)
       {
            $productView = new ProductView();
-      $productView->setProduct($product);
-      $productView->setAuthor($user);
-      $this->em->persist($productView);
-      $this->em->flush();
+           $productView->setProduct($product);
+           $productView->setAuthor($user);
+           $this->em->persist($productView);
+           $this->em->flush();
       }
      
   }

@@ -19,19 +19,26 @@ class Notificator
    */
   private $em;
 
+  /**
+   * @var TokenStorageInterface
+   */
   private $tokenStorage;
 
+  /**
+   * @var Swift_Mailer
+   */
   private $mailer;
 
 
-  // On injecte l'EntityManager
+  // injecte in EntityManager, TokenStorage and Swift_Mailler
   public function __construct(EntityManagerInterface $em, TokenStorageInterface $tokenStorage, \Swift_Mailer $mailer)
   {
     $this->em = $em;
     $this->tokenStorage = $tokenStorage;
     $this->mailer = $mailer;
   }
-
+  
+  //notify in switch option
   public function nofify($object)
   {
       switch ($object) {
@@ -46,7 +53,8 @@ class Notificator
           break;
       }
   }
-
+  
+  //add follower notification in database
   public function persistNotifyFollower(Follower $object)
   {
     $user = $this->tokenStorage->getToken()->getUser();
@@ -62,10 +70,12 @@ class Notificator
 
     }
   }
-  public function persistNotifyProduct(Product $object){
+
+  //add ProductVote notifcation in database(notifify auteur and participants)
+  public function persistNotifyProduct(Product $object)
+  {
     $user = $this->tokenStorage->getToken()->getUser();
 
-    //nofify l'author du produit des votes des autres
     if($user != $object->getAuthor())
     {
       $notification = new Notification();
@@ -76,9 +86,9 @@ class Notificator
       $this->em->persist($notification);
       $this->em->flush();
     }
-    //notify les autres
-      foreach ($object->getVotes() as $vote) 
-      {
+
+    foreach ($object->getVotes() as $vote) 
+    {
         if($vote->getIsNotify())
         {
           $notification = new Notification();
@@ -89,10 +99,10 @@ class Notificator
           $this->em->persist($notification);
         }
         $this->em->flush();
-      }
-      
+    }  
   }
 
+  //update seen notify and update user status
   public function seen($notifications)
   {
 
@@ -105,15 +115,12 @@ class Notificator
 
             $user = $this->tokenStorage->getToken()->getUser();
             $compteur = $user->getNbNotifications();
+
             if($compteur>0)
-            {
                $user->setNbNotifications($compteur-1);
-            }
             else
-            {
                $user->setNbNotifications(0);
-            }
-            
+    
             $this->em->persist($user);
             $this->em->flush();
         }

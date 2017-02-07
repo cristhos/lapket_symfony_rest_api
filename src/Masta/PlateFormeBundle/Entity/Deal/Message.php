@@ -84,28 +84,12 @@ class Message
      */
     public function increase()
     {
-        $compteur = $this->getReceiver()->getReceivedMessages()->count();
-        $this->getReceiver()->setNbReceivedMessages($compteur +1);
-
-        $compteur_author=0;
-        $compteur_receiver=0;
-        
-        foreach($this->getConversation()->getMessages() as $message) {
-            if($message->getAuthor() == $this->getAuthor()){
-                $compteur_author ++;
-            }else{
-                $compteur_receiver ++;
-            }
-        }
-
-        if($this->getAuthor() == $this->getConversation()->getAuthor()){
-            $this->getConversation()->setNbAuthorMessages($compteur_author+1); 
-        }else{
-            $this->getConversation()->setNbReceiverMessages($compteur_receiver+1);
-        }
-        
-           
-        
+      $compteur=0;
+      foreach ($this->getReceiver()->getReceivedMessages() as $message) 
+      {
+         if($message->getIsSeen() == false) $compteur ++;
+      }
+      $this->getReceiver()->setNbReceivedMessages($compteur + 1); 
     }
 
     /**
@@ -113,25 +97,15 @@ class Message
      */
     public function decrease()
     {
-        $compteur = $this->getReceiver()->getReceivedMessages()->count();
-        $this->getReceiver()->setNbReceivedMessages($compteur -1);
-
-        $compteur_author=0;
-        $compteur_receiver=0;
-        
-        foreach ($this->getConversation()->getMessages() as $message) {
-            if($message->getAuthor() == $this->getAuthor()){
-                $compteur_author ++;
-            }else{
-                $compteur_receiver ++;
-            }
-        }
-
-        if($this->getAuthor()== $this->getConversation()->getAuthor()){
-                $this->getConversation()->setNbReceiverMessages($compteur_receiver - 1);
-         }else{
-                $this->getConversation()->setNbAuthorMessages($compteur_author - 1);
-        } 
+      $compteur=0;
+      foreach ($this->getReceiver()->getReceivedMessages() as $message) 
+      {
+         if($message->getIsSeen() == false) $compteur ++;
+      }
+      if($compteur > 0)
+        $this->getReceiver()->setNbReceivedMessages($compteur - 1);
+      else
+        $this->getReceiver()->setNbReceivedMessages(0);
        
     }
 

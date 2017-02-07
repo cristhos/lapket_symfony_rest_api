@@ -143,9 +143,6 @@ class MessageController extends FOSRestController
             throw $this->createNotFoundException("Conversation does not exist.");
         }
 
-        //Verification
-        $this->checkDealAction($Message,$this->getUser());
-
         $view = new View($Message);
 
         return $view;
@@ -244,38 +241,31 @@ class MessageController extends FOSRestController
         return $this->deleteMessageAction($request, $message_id);
     }
 
-    public function checkDealsAction($deals,$user)
-    {
-      foreach ($deals as $deal )
-      {
-        $this->checkDealAction($deal,$user);
-      }
-    }
-    public function checkDealAction($deal,$user){
-      if($deal->getAuthor()->getProfilePicture() !== null)
-      {
 
-          $deal->getAuthor()->getProfilePicture()->setWebPath('http://apis.mapket.com/web/'.$deal->getAuthor()->getProfilePicture()->getWebPath());
-
-      }
-        if($deal->getAuthor() == $user)
-        {
-          $deal->setIsAuthor(true);
-        }
-        else
-        {
-          $deal->setIsAuthor(false);
-        }
-    }
-
+    //update message if is seen
     public function messasgesSeenAction($messages)
     {
       $em = $this->getDoctrine()->getManager();
       foreach ($messages as $message)
       {
-        $message->setIsSeen(true);
-        $em->persist($message);
-        $em->flush();
+        if($message->getIsSeen() == false)
+        {
+            $message->setIsSeen(true);
+            $em->persist($message);
+            $em->flush();
+            
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $compteur = $user->getNbReceivedMessages();
+            
+            if($compteur>0)
+                $user->setNbReceivedMessages($compteur-1);
+            else
+                $user->setNbReceivedMessages(0);
+        
+            $em->persist($user);
+            $em->flush();
+        }
+        
       }
     }
 }
