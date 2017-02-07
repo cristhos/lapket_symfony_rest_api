@@ -54,7 +54,7 @@ class Message
     private $receiver;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation")
+     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation", inversedBy="messages")
      */
     private $conversation;
 
@@ -84,90 +84,58 @@ class Message
      */
     public function increase()
     {
-      if($this->getAuthor() == $this->getConversation()->getAuthor())
-      {
-        $compteur = $this->getConversation()
-                         ->getProduct()
-                         ->getAuthor()
-                         ->getNbMessages();
-        if($compteur < 0)
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages(0);
+        $compteur = $this->getReceiver()->getReceivedMessages()->count();
+        $this->getReceiver()->setNbReceivedMessages($compteur +1);
+
+        $compteur_author=0;
+        $compteur_receiver=0;
+        
+        foreach($this->getConversation()->getMessages() as $message) {
+            if($message->getAuthor() == $this->getAuthor()){
+                $compteur_author ++;
+            }else{
+                $compteur_receiver ++;
+            }
         }
-        else
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages($compteur + 1);
-        }
-      }
-      else
-      {
-        $compteur = $this->getConversation()->getAuthor()->getNbMessages();
-        if($compteur < 0)
-        {
-          $this->getConversation()->getAuthor()->setNbMessages(0);
+
+        if($this->getAuthor() == $this->getConversation()->getAuthor()){
+            $this->getConversation()->setNbAuthorMessages($compteur_author+1); 
         }else{
-          $this->getConversation()->getAuthor()->setNbMessages($compteur+1);
+            $this->getConversation()->setNbReceiverMessages($compteur_receiver+1);
         }
-      }
-
-
+        
+           
+        
     }
 
     /**
      * @ORM\preRemove
      */
-    public function decreaseToRemove()
+    public function decrease()
     {
-      $this->decrement();
+        $compteur = $this->getReceiver()->getReceivedMessages()->count();
+        $this->getReceiver()->setNbReceivedMessages($compteur -1);
+
+        $compteur_author=0;
+        $compteur_receiver=0;
+        
+        foreach ($this->getConversation()->getMessages() as $message) {
+            if($message->getAuthor() == $this->getAuthor()){
+                $compteur_author ++;
+            }else{
+                $compteur_receiver ++;
+            }
+        }
+
+        if($this->getAuthor()== $this->getConversation()->getAuthor()){
+                $this->getConversation()->setNbReceiverMessages($compteur_receiver - 1);
+         }else{
+                $this->getConversation()->setNbAuthorMessages($compteur_author - 1);
+        } 
+       
     }
 
-    /**
-     * @ORM\preUpdate
-     */
-    public function decreaseToUpdate()
-    {
-      $this->decrement();
-    }
-    //common function to decrement
-    public function decrement()
-    {
-      if($this->getAuthor()->getId() != $this->getConversation()->getAuthor()->getId())
-      {
-        $compteur = $this->getConversation()
-                         ->getProduct()
-                         ->getAuthor()
-                         ->getNbMessages();
-        if($compteur <= 0 )
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages(0);
-        }else{
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages($compteur - 1);
-        }
-      }
-      else
-      {
-        $compteur = $this->getConversation()->getAuthor()->getNbMessages();
-        if($compteur <= 0)
-        {
-          $this->getConversation()->getAuthor()->setNbMessages(0);
-        }else{
-          $this->getConversation()->getAuthor()->setNbMessages($compteur-1);
-        }
-      }
-    }
-
+  //end special function
 
 
     /**

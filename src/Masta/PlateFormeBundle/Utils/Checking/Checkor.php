@@ -129,7 +129,7 @@ class Checkor
     {
       $this->checkUser($f->getUserFollowed());
     }
-  }
+  }    
 
   //Notifications
   public function checkNotifications($notifications)
@@ -214,7 +214,7 @@ class Checkor
     public function checkPicture($picture)
     {
       $picture->setWebPath('http://localhost/masta/web/'.$picture->getWebPath());
-      //$picture->setWebPath('http://192.168.43.59/Lab/codash/masta/web/'.$picture->getWebPath());
+      //$picture->setWebPath('http://192.168.173.78/masta/web/'.$picture->getWebPath());
     }
 
 }

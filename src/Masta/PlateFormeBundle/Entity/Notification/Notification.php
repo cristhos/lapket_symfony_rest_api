@@ -72,17 +72,28 @@ class Notification
      */
     public function increase()
     {
-      $compteur = $this->getDestinator()->getNotifications()->count();
+      $compteur = 0;
+      foreach ($this->getDestinator()->getNotifications() as $notification) 
+      {
+         if($notification->getIsSeen() == false) $compteur ++;
+      }
       $this->getDestinator()->setNbNotifications($compteur+1);
     }
 
     /**
      * @ORM\PreRemove
      */
-    public function decrement()
+    public function removing()
     {
-        $compteur = $this->getDestinator()->getNotifications()->count();
-        $this->getDestinator()->setNbNotifications($compteur-1);
+       $compteur = 0;
+       foreach ($this->getDestinator()->getNotifications() as $notification) 
+       {
+         if($notification->getIsSeen() == false) $compteur ++;
+       }
+       if($compteur>0)
+           $this->getDestinator()->setNbNotifications($compteur+1);
+       else
+           $this->getDestinator()->setNbNotifications(0);
     }
 
     /**
@@ -92,7 +103,6 @@ class Notification
     {
       
     }
-
 
     /**
      * Get id

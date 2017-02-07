@@ -249,6 +249,12 @@ class Product
  
      public function ranking()
      {
+         $date_time = date("d M Y H:i:s");
+         $date_timestamp = strtotime($date_time);
+         $date_published_at = $this->getPublishedAt();
+         $product_published_at_timestamp = $this->getPublishedAt()->getTimestamp();         
+         $product_published_at_rank = $date_timestamp/$product_published_at_timestamp;
+
          $category_rank = $this->getCategory()->getRank();
          $user_rank = $this->getAuthor()->getRank();
 
@@ -257,15 +263,28 @@ class Product
          $nb_product_votes = $this->getNbVotes();
          $nb_product_conversations = $this->getNbConversations();
          
-         $vote_probability = 1/$nb_product_views;
-         $conversation_probability = 1/$nb_product_views;
-         $product_probability = 1/$nb_total_products;
+         if($nb_product_views > 0)
+         {
+            $vote_probability = 1/$nb_product_views;
+            $conversation_fc = $nb_product_conversations/$nb_product_views; 
+            $vote_fc= $nb_product_votes/$nb_product_views;
+         }
+         else
+         {
+            $vote_probability=0;
+            $conversation_fc = 0;
+            $vote_fc = 0;
 
-         $vote_fc= $nb_product_votes/$nb_product_views;
-         $conversation_fc = $nb_product_conversations/$nb_product_views;
+         }
 
-        $rank=($vote_fc*$vote_probability)+($conversation_fc*$conversation_probability)+($vote_fc*$category_rank)
-              +($vote_fc*$user_rank)+($conversation_fc*$user_rank)+($conversation_fc*$category_rank)+($conversation_fc*$product_probability)+($conversation_fc*$product_probability);
+         if($nb_total_products > 0)
+             $product_probability = 1/$nb_total_products;
+         else
+            $product_probability=0;
+         
+        
+        $rank = $category_rank * ($product_published_at_rank + ($vote_fc*$vote_probability)
+        +($conversation_fc*$vote_probability)+($vote_fc*$category_rank) );
               
         return $rank;
      }

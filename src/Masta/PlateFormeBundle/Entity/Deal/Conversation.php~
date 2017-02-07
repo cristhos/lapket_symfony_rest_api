@@ -50,9 +50,27 @@ class Conversation
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_mssages", type="integer",nullable=true)
+     * @ORM\Column(name="nb_receiver_messages", type="integer",nullable=true)
      */
-    private $nbMessages;
+    private $nbReceiverMessages=0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_author_messages", type="integer",nullable=true)
+     */
+    private $nbAuthorMessages=0;
+    
+
+        /**
+     * @ORM\OneToMany(
+     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Message",
+     *      mappedBy="conversation",
+     *      orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"publishedAt" = "DESC"})
+     */
+    private $messages;
 
     //speciales
     public $isAuthor;
@@ -62,7 +80,6 @@ class Conversation
     {
         $this->publishedAt = new \DateTime();
         $this->isSeen = false;
-        $this->nbMessages = 0;
     }
 
 
@@ -109,133 +126,5 @@ class Conversation
     }
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set publishedAt
-     *
-     * @param \DateTime $publishedAt
-     *
-     * @return Conversation
-     */
-    public function setPublishedAt($publishedAt)
-    {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get publishedAt
-     *
-     * @return \DateTime
-     */
-    public function getPublishedAt()
-    {
-        return $this->publishedAt;
-    }
-
-    /**
-     * Set isSeen
-     *
-     * @param boolean $isSeen
-     *
-     * @return Conversation
-     */
-    public function setIsSeen($isSeen)
-    {
-        $this->isSeen = $isSeen;
-
-        return $this;
-    }
-
-    /**
-     * Get isSeen
-     *
-     * @return boolean
-     */
-    public function getIsSeen()
-    {
-        return $this->isSeen;
-    }
-
-    /**
-     * Set product
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
-     *
-     * @return Conversation
-     */
-    public function setProduct(\Masta\PlateFormeBundle\Entity\Product\Product $product = null)
-    {
-        $this->product = $product;
-
-        return $this;
-    }
-
-    /**
-     * Get product
-     *
-     * @return \Masta\PlateFormeBundle\Entity\Product\Product
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * Set author
-     *
-     * @param \Masta\UserBundle\Entity\User $author
-     *
-     * @return Conversation
-     */
-    public function setAuthor(\Masta\UserBundle\Entity\User $author = null)
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * Get author
-     *
-     * @return \Masta\UserBundle\Entity\User
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * Set nbMessages
-     *
-     * @param integer $nbMessages
-     *
-     * @return Conversation
-     */
-    public function setNbMessages($nbMessages)
-    {
-        $this->nbMessages = $nbMessages;
-
-        return $this;
-    }
-
-    /**
-     * Get nbMessages
-     *
-     * @return integer
-     */
-    public function getNbMessages()
-    {
-        return $this->nbMessages;
-    }
+   
 }

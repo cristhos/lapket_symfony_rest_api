@@ -51,14 +51,8 @@ class ProductView
      */
     public function increase()
     {
-      $compteur = $this->getProduct()->getNbViews();
-      if($compteur < 0)
-      {
-        $initialise = 0;
-        $this->getProduct()->setNbViews($initialise + 1);
-      }else{
-        $this->getProduct()->setNbViews($compteur+1);
-      }
+      $compteur = $this->getProduct()->getProductViews()->count();
+      $this->getProduct()->setNbViews($compteur+1);
     }
 
     /**
@@ -66,14 +60,8 @@ class ProductView
      */
     public function decrease()
     {
-      $compteur = $this->getProduct()->getNbViews();
-      if($compteur <= 0 )
-      {
-        $initialise = 0;
-        $this->getProduct()->setNbViews($initialise);
-      }else{
-        $this->getProduct()->setNbViews($compteur-1);
-      }
+      $compteur = $this->getProduct()->getProductViews()->count();
+      $this->getProduct()->setNbViews($compteur-1);
     }
 
     /**

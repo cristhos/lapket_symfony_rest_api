@@ -50,9 +50,27 @@ class Conversation
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_mssages", type="integer",nullable=true)
+     * @ORM\Column(name="nb_receiver_messages", type="integer",nullable=true)
      */
-    private $nbMessages;
+    private $nbReceiverMessages=0;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="nb_author_messages", type="integer",nullable=true)
+     */
+    private $nbAuthorMessages=0;
+    
+
+        /**
+     * @ORM\OneToMany(
+     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Message",
+     *      mappedBy="conversation",
+     *      orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"publishedAt" = "DESC"})
+     */
+    private $messages;
 
     //speciales
     public $isAuthor;
@@ -62,7 +80,6 @@ class Conversation
     {
         $this->publishedAt = new \DateTime();
         $this->isSeen = false;
-        $this->nbMessages = 0;
     }
 
 
@@ -108,6 +125,8 @@ class Conversation
         return $this->isAuthor;
     }
 
+
+   
 
     /**
      * Get id
@@ -168,6 +187,54 @@ class Conversation
     }
 
     /**
+     * Set nbReceiverMessages
+     *
+     * @param integer $nbReceiverMessages
+     *
+     * @return Conversation
+     */
+    public function setNbReceiverMessages($nbReceiverMessages)
+    {
+        $this->nbReceiverMessages = $nbReceiverMessages;
+
+        return $this;
+    }
+
+    /**
+     * Get nbReceiverMessages
+     *
+     * @return integer
+     */
+    public function getNbReceiverMessages()
+    {
+        return $this->nbReceiverMessages;
+    }
+
+    /**
+     * Set nbAuthorMessages
+     *
+     * @param integer $nbAuthorMessages
+     *
+     * @return Conversation
+     */
+    public function setNbAuthorMessages($nbAuthorMessages)
+    {
+        $this->nbAuthorMessages = $nbAuthorMessages;
+
+        return $this;
+    }
+
+    /**
+     * Get nbAuthorMessages
+     *
+     * @return integer
+     */
+    public function getNbAuthorMessages()
+    {
+        return $this->nbAuthorMessages;
+    }
+
+    /**
      * Set product
      *
      * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
@@ -216,26 +283,36 @@ class Conversation
     }
 
     /**
-     * Set nbMessages
+     * Add message
      *
-     * @param integer $nbMessages
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $message
      *
      * @return Conversation
      */
-    public function setNbMessages($nbMessages)
+    public function addMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $message)
     {
-        $this->nbMessages = $nbMessages;
+        $this->messages[] = $message;
 
         return $this;
     }
 
     /**
-     * Get nbMessages
+     * Remove message
      *
-     * @return integer
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $message
      */
-    public function getNbMessages()
+    public function removeMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $message)
     {
-        return $this->nbMessages;
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

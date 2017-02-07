@@ -177,9 +177,15 @@ class MessageController extends FOSRestController
       $em = $this->getDoctrine()->getManager();
       $user = $this->get('security.token_storage')->getToken()->getUser();
       $content = $request->get('content');
-
+      
       $message = new Message();
       $message->setAuthor($user);
+
+      if($user == $conversation->getAuthor())
+        $message->setReceiver($conversation->getProduct()->getAuthor());
+      else
+        $message->setReceiver($conversation->getAuthor());
+
       $message->setContent($content);
       $message->setConversation($conversation);
       $em->persist($message);

@@ -54,7 +54,7 @@ class Message
     private $receiver;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation")
+     * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation", inversedBy="messages")
      */
     private $conversation;
 
@@ -84,90 +84,26 @@ class Message
      */
     public function increase()
     {
-      if($this->getAuthor() == $this->getConversation()->getAuthor())
-      {
-        $compteur = $this->getConversation()
-                         ->getProduct()
-                         ->getAuthor()
-                         ->getNbMessages();
-        if($compteur < 0)
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages(0);
-        }
-        else
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages($compteur + 1);
-        }
-      }
-      else
-      {
-        $compteur = $this->getConversation()->getAuthor()->getNbMessages();
-        if($compteur < 0)
-        {
-          $this->getConversation()->getAuthor()->setNbMessages(0);
-        }else{
-          $this->getConversation()->getAuthor()->setNbMessages($compteur+1);
-        }
-      }
+        $compteur = $this->getReceiver()->getReceivedMessages()->count();
+        $this->getReceiver()->setNbReceivedMessages($compteur +1);
 
-
+        $compteur = $this->getConversation()->getMessages()->count();
+        //$this->getConversation()->setNbMessages($compteur +1);
     }
 
     /**
      * @ORM\preRemove
      */
-    public function decreaseToRemove()
+    public function decrease()
     {
-      $this->decrement();
+        $compteur = $this->getReceiver()->getReceivedMessages()->count();
+        $this->getReceiver()->setNbReceivedMessages($compteur -1);
+
+        $compteur = $this->getConversation()->getMessages()->count();
+        //$this->getConversation()->setNbMessages($compteur -1);
     }
 
-    /**
-     * @ORM\preUpdate
-     */
-    public function decreaseToUpdate()
-    {
-      $this->decrement();
-    }
-    //common function to decrement
-    public function decrement()
-    {
-      if($this->getAuthor()->getId() != $this->getConversation()->getAuthor()->getId())
-      {
-        $compteur = $this->getConversation()
-                         ->getProduct()
-                         ->getAuthor()
-                         ->getNbMessages();
-        if($compteur <= 0 )
-        {
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages(0);
-        }else{
-          $this->getConversation()
-                           ->getProduct()
-                           ->getAuthor()
-                           ->setNbMessages($compteur - 1);
-        }
-      }
-      else
-      {
-        $compteur = $this->getConversation()->getAuthor()->getNbMessages();
-        if($compteur <= 0)
-        {
-          $this->getConversation()->getAuthor()->setNbMessages(0);
-        }else{
-          $this->getConversation()->getAuthor()->setNbMessages($compteur-1);
-        }
-      }
-    }
-
+  //end special function
 
 
     /**
@@ -298,5 +234,29 @@ class Message
     public function getConversation()
     {
         return $this->conversation;
+    }
+
+    /**
+     * Set receiver
+     *
+     * @param \Masta\UserBundle\Entity\User $receiver
+     *
+     * @return Message
+     */
+    public function setReceiver(\Masta\UserBundle\Entity\User $receiver = null)
+    {
+        $this->receiver = $receiver;
+
+        return $this;
+    }
+
+    /**
+     * Get receiver
+     *
+     * @return \Masta\UserBundle\Entity\User
+     */
+    public function getReceiver()
+    {
+        return $this->receiver;
     }
 }

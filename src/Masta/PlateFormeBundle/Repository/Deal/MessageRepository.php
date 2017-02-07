@@ -20,14 +20,11 @@ class MessageRepository extends EntityRepository
 
     $queryBuilder = $this->createQueryBuilder('cr')
                          ->where('cr.conversation =:conversation_id')->setParameter('conversation_id', $conversation_id)
-                         ->orderBy('cr.publishedAt', 'DESC')
+                         ->orderBy('cr.publishedAt', 'ASC')
                          ->getQuery();
     $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
     $pager = new Pagerfanta($pagerAdapter);
     $pager->setMaxPerPage($limit);
-    
-    //ceci est temporaire
-    //$last_page = $pager->getNbPages();
     
     $pager->setCurrentPage($page);
   

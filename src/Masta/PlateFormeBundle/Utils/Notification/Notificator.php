@@ -103,13 +103,19 @@ class Notificator
             $this->em->persist($notification);
             $this->em->flush();
 
-            $destinator = $notification->getDestinator();
-            $compteur = $destinator->getNotifications()->count();
-            $destinator->setNbNotifications($compteur - 1);
-            $this->em->persist($destinator);
+            $user = $this->tokenStorage->getToken()->getUser();
+            $compteur = $user->getNbNotifications();
+            if($compteur>0)
+            {
+               $user->setNbNotifications($compteur-1);
+            }
+            else
+            {
+               $user->setNbNotifications(0);
+            }
+            
+            $this->em->persist($user);
             $this->em->flush();
-
-
         }
     }   
   }
