@@ -375,11 +375,7 @@ class User extends BaseUser
      */
     public function increase()
     {
-      if($this->getStat() != NULL)
-      {
-        $compteur = $this->getStat()->getUsers()->count();
-        $this->getStat()->setNbUsers($compteur+1);
-      }
+      
     }
 
     /**
@@ -387,14 +383,7 @@ class User extends BaseUser
      */
     public function decrease()
     {
-      $compteur = $this->getStat()->getUsers()->count();
-      $this->getStat()->setNbUsers($compteur-1);
-
-      $compteur = $this->getCountry()->getUsers()->count();
-      $this->getCountry()->setNbUsers($compteur-1);
-
-      $compteur = $this->getCountry()->getUsers()->count();
-      $this->getCountry()->setNbUsers($compteur-1);
+      
     }
 
     //end Verification function
