@@ -30,3 +30,6 @@ monolog:
             level: debug
         console:
             type:  console
+
+swiftmailer:
+    port:      %mailer_port%
