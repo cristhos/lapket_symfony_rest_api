@@ -31,5 +31,6 @@ services:
     class: Masta\PlateFormeBundle\Utils\Checking\Checkor
     arguments:
       - "@security.token_storage"
+      - "@service_container"
 
   

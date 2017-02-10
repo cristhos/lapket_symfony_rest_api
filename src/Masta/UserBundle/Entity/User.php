@@ -363,10 +363,10 @@ class User extends BaseUser
     //Cette fonction calcul le score 
     public function ranking()
     {
-      $city_rank = $this->getCity()->getRank();
+      //$city_rank = $this->getCity()->getRank();
 
 
-      $rank=2.5;
+      $rank=1.5;
       return $rank;
     }
 
@@ -375,9 +375,12 @@ class User extends BaseUser
      */
     public function increase()
     {
-    
-      $compteur = $this->getStat()->getUsers()->count();
       $this->getStat()->setNbUsers($compteur+1);
+      if($this->getStat() != NULL)
+      {
+        $compteur = $this->getStat()->getUsers()->count();
+        $this->getStat()->setNbUsers($compteur+1);
+      }
     }
 
     /**
@@ -403,7 +406,7 @@ class User extends BaseUser
      */
     public function updateDate()
     {
-        $this->setRank($this->ranking());
+        //$this->setRank($this->ranking());
     }
 
     /**

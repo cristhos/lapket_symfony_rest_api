@@ -1,8 +1,9 @@
 <?php
 namespace Masta\PlateFormeBundle\Utils\Checking;
 
-
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Masta\UserBundle\Entity\User;
 
 class Checkor
@@ -12,27 +13,31 @@ class Checkor
    */
   private $tokenStorage;
 
-  // On injecte TokenStorageInterface
-  public function __construct(TokenStorageInterface $tokenStorage)
+  /**
+   * @var ContainerInterface
+   */
+   private $container;
+
+  //injecte TokenStorageInterface and ContainerInterface
+  public function __construct(TokenStorageInterface $tokenStorage, ContainerInterface $container)
   {
     $this->tokenStorage = $tokenStorage;
+    $this->container = $container;
   }
 
-////FONCTIONS QUI CONCERNE LES TRAITEMENTS DES PRODUIS
-
+  // each array products and check specific
   public function checkProducts($products)
   {
-    foreach ($products as $product )
-    {
-      $this->checkProduct($product);
-    }
+    foreach ($products as $product ) $this->checkProduct($product);
   }
-  public function checkProduct($product){
+
+  // check a product
+  public function checkProduct($product)
+  {
     $user = $this->tokenStorage->getToken()->getUser();
-    if($product->getAuthor()->getProfilePicture() !== null)
-    {
-      $this->checkUser($product->getAuthor());
-    }
+
+    if($product->getAuthor()->getProfilePicture() !== null) $this->checkUser($product->getAuthor());
+
     if($product->getAuthor() == $user)
     {
       $product->setIsAuthor(true);
@@ -42,29 +47,25 @@ class Checkor
       $product->setIsAuthor(false);
     }
 
-     if($product->getPicture() != null) $this->checkPicture($product->getPicture());
+    if($product->getPicture() != null) $this->checkPicture($product->getPicture());
   
-      $product->setIsVoted(false);
-      foreach ($product->getVotes() as $vote)
+    $product->setIsVoted(false);
+
+    foreach ($product->getVotes() as $vote)
+    {
+      if($vote->getAuthor() == $user)
       {
-          if($vote->getAuthor() == $user)
-          {
-            $product->setIsVoted(true);
-            $product->setIsNotify($vote->getIsNotify());
-            break;
-          } 
-      }
-
-
+        $product->setIsVoted(true);
+        $product->setIsNotify($vote->getIsNotify());
+        break;
+      } 
+    }
   }
 
   ///CONCERNE L'UTILISATEUR
   public function checkUsers($users)
   {
-    foreach ($users as $user)
-    {
-      $this->checkUser($user);
-    }
+    foreach ($users as $user) $this->checkUser($user);
   }
 
   public function checkUser($user)
@@ -76,7 +77,9 @@ class Checkor
 
     if($actual_user == $user){
       $user->setIsAuthor(true);
-    }else{
+    }
+    else
+    {
       $user->setIsAuthor(false);
     }
 
@@ -96,7 +99,8 @@ class Checkor
     $user->setIsFollowIt(false);
     $user->setIsFollowMe(false);
 
-    if($actual_user instanceOf User){
+    if($actual_user instanceOf User)
+    {
           if($user != $actual_user)
             {
                     foreach ($actual_user->getFollowers() as $follower)
@@ -108,7 +112,7 @@ class Checkor
                     {
                       if($follows->getAuthor() == $user) $user->setIsFollowMe(true);
                     }
-                }
+           }
     }
   }
 
@@ -116,19 +120,13 @@ class Checkor
   //Follower
   public function checkFollowers($followers)
   {
-    foreach ($followers as $f)
-    {
-      $this->checkUser($f->getAuthor());
-    }
+    foreach ($followers as $f)  $this->checkUser($f->getAuthor());
   }
 
   //Follows
   public function checkFollows($follows)
   {
-    foreach ($follows as $f)
-    {
-      $this->checkUser($f->getUserFollowed());
-    }
+    foreach ($follows as $f)  $this->checkUser($f->getUserFollowed());
   }    
 
   //Notifications
@@ -145,19 +143,14 @@ class Checkor
   //Albums
   public function checkAlbums($albums)
   {
-    foreach ($albums as $album )
-    {
-      $this->checkAlbum($album);
-    }
+    foreach ($albums as $album )  $this->checkAlbum($album);
   }
 
   public function checkAlbum($album)
   {
     $user = $this->tokenStorage->getToken()->getUser();
-    if($album->getAuthor()->getProfilePicture() !== null)
-    {
-      $this->checkUser($album->getAuthor());
-    }
+    if($album->getAuthor()->getProfilePicture() !== null) $this->checkUser($album->getAuthor());
+    
 
     if($album->getAuthor() == $user)
     {
@@ -173,10 +166,7 @@ class Checkor
   ////FONCTIONS QUI CONCERNE LES TRAITEMENTS DES CONVERSATIONS
     public function checkConversations($conversations)
     {
-      foreach ($conversations as $conversation )
-      {
-        $this->checkConversation($conversation);
-      }
+      foreach ($conversations as $conversation )  $this->checkConversation($conversation);
     }
 
     public function checkConversation($conversation)
@@ -186,35 +176,40 @@ class Checkor
     }
 
 
-    ////FONCTIONS QUI CONCERNE LES TRAITEMENTS DES MESSAGES
+    //check messages
     public function checkMessages($messages)
     {
-      foreach ($messages as $message )
-      {
-        $this->checkMessage($message);
-      }
+      foreach ($messages as $message )  $this->checkMessage($message);
     }
-
+    //check message
     public function checkMessage($message)
     {
       $this->checkUser($message->getAuthor());
     }
 
 
-    ///FONCTIONS QUI AJOUTE UN URL AU IMAGES
-
+    // each array() and check specifique picture
     public function checkPictures($pictures)
     {
-      foreach($picture as $pictures) 
-      {
-        $this->checkPicture($picture);
-      }
+      foreach($picture as $pictures)  $this->checkPicture($picture);
     }
-
+    //add url to one picture
     public function checkPicture($picture)
     {
-      $picture->setWebPath('http://localhost/masta/web/'.$picture->getWebPath());
-      //$picture->setWebPath('http://192.168.173.78/masta/web/'.$picture->getWebPath());
+      $kernel = $this->container->get('kernel');
+      if($kernel->getEnvironment() == "prod")
+      {
+        $picture->setWebPath('http://138.68.52.163/'.$picture->getWebPath());
+      }
+      else if($kernel->getEnvironment() == "pre_prod")
+      {
+        $picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
+      }
+      else
+      {
+        $picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
+      }
+      
     }
 
 }
