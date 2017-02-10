@@ -375,9 +375,11 @@ class User extends BaseUser
      */
     public function increase()
     {
-    
-      $compteur = $this->getStat()->getUsers()->count();
-      $this->getStat()->setNbUsers($compteur+1);
+      if($this->getStat() != NULL)
+      {
+        $compteur = $this->getStat()->getUsers()->count();
+        $this->getStat()->setNbUsers($compteur+1);
+      }
     }
 
     /**
