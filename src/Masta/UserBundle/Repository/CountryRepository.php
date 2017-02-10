@@ -16,7 +16,7 @@ class CountryRepository extends \Doctrine\ORM\EntityRepository
     public function getCountries($limit, $page)
     {
         $queryBuilder = $this->createQueryBuilder('c')
-                             ->where('c.nb_cities > :zero')->setParameter('zero', 0) 
+                             ->where('c.nbCities > :zero')->setParameter('zero', 0) 
                              ->orderBy('c.rank', 'DESC')
                              ->getQuery();
         $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
