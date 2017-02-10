@@ -406,7 +406,7 @@ class User extends BaseUser
      */
     public function updateDate()
     {
-        $this->setRank($this->ranking());
+        //$this->setRank($this->ranking());
     }
 
     /**
