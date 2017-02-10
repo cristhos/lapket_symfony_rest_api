@@ -363,10 +363,10 @@ class User extends BaseUser
     //Cette fonction calcul le score 
     public function ranking()
     {
-      $city_rank = $this->getCity()->getRank();
+      //$city_rank = $this->getCity()->getRank();
 
 
-      $rank=2.5;
+      $rank=1.5;
       return $rank;
     }
 
