@@ -37,10 +37,10 @@ class UserRepository extends EntityRepository
 
           $qb = $this->createQueryBuilder('u')
                                //->leftJoin('u.categoryFollows', 'cf')->addSelect('cf')
-                               ->where('u.id <> :id')->setParameter('id', $user->getId()) 
                                //->andWhere('cf.category in(:categoryFollows)')->setParameter('categoryFollows', $categoryFollows)
-                               ->orWhere('u.city =:city')->setParameter('city', $city)
-                               ->orWhere('u.country =:country')->setParameter('country', $country);
+                               ->where('u.city =:city')->setParameter('city', $city)
+                               ->orWhere('u.country =:country')->setParameter('country', $country)
+                               ->andWhere('u.id <> :id')->setParameter('id', $user->getId());
           if($follows_id != null)  $qb->andWhere('u.id not in(:follows_id)')->setParameter('follows_id', $follows_id);
          
           $qb->getQuery();

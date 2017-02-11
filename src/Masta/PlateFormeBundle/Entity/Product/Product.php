@@ -289,6 +289,15 @@ class Product
         return $rank;
      }
 
+         /**
+     * toString
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getDescription();
+    }
+
      //end function special
 
     /**
