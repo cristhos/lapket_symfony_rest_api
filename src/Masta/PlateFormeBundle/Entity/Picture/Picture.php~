@@ -124,7 +124,7 @@ class Picture
   public function getUploadDir()
   {
     // On retourne le chemin relatif vers l'image pour un navigateur (relatif au répertoire /web donc)
-    return 'uploads/pictures/'.$this->getPublishedAt()->format('y').'/'.$this->getPublishedAt()->format('m').'/'.$this->getPublishedAt()->format('d');
+    return 'uploads/pictures';
   }
 
   protected function getUploadRootDir()
@@ -207,28 +207,4 @@ class Picture
       $this->alt = null;
     }
   }
-
-    /**
-     * Set publishedAt
-     *
-     * @param \DateTime $publishedAt
-     *
-     * @return Picture
-     */
-    public function setPublishedAt($publishedAt)
-    {
-        $this->publishedAt = $publishedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get publishedAt
-     *
-     * @return \DateTime
-     */
-    public function getPublishedAt()
-    {
-        return $this->publishedAt;
-    }
 }

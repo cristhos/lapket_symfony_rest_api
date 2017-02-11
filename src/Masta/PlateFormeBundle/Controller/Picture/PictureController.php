@@ -2,7 +2,6 @@
 namespace Masta\PlateFormeBundle\Controller\Picture;
 
 use Masta\PlateFormeBundle\Entity\Picture\Picture;
-use Masta\PlateFormeBundle\Form\Picture\PictureType;
 use FOS\RestBundle\Controller\Annotations;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -12,12 +11,11 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Hateoas\Configuration\Route;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Rest controller for Pictures
  *
@@ -26,7 +24,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class PictureController extends FOSRestController
 {
-
 
     /**
      * Get a single picture.
