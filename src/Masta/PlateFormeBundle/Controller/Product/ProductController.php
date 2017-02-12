@@ -453,7 +453,6 @@ class ProductController extends FOSRestController
     
         $em = $this->getDoctrine()->getManager();
        
-        $name = $request->get('name');
         $description = $request->get('description');
         $price = $request->get('price');
 
@@ -473,7 +472,6 @@ class ProductController extends FOSRestController
         $category = $em->getRepository('MastaPlateFormeBundle:Category\Category')->find($request->get('category_id'));
         $product->setAuthor($user);
         $product->setDescription($description);
-        $product->setName($name);
         $product->setPrice($price);
         $product->setCategory($category);
 
