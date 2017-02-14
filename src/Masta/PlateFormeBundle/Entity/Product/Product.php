@@ -253,7 +253,7 @@ class Product
          $date_timestamp = strtotime($date_time);
          $date_published_at = $this->getPublishedAt();
          $product_published_at_timestamp = $this->getPublishedAt()->getTimestamp();         
-         $product_published_at_rank = $date_timestamp/$product_published_at_timestamp;
+         $product_published_at_rank = $product_published_at_timestamp/$date_timestamp;
 
          $category_rank = $this->getCategory()->getRank();
          $user_rank = $this->getAuthor()->getRank();
@@ -283,7 +283,7 @@ class Product
             $product_probability=0;
          
         
-        $rank = $category_rank * ($product_published_at_rank + ($vote_fc*$vote_probability)
+        $rank = $category_rank * (($product_published_at_rank * $vote_probability) + ($vote_fc*$vote_probability)
         +($conversation_fc*$vote_probability)+($vote_fc*$category_rank) );
               
         return $rank;
