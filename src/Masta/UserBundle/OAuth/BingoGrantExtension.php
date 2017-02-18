@@ -1,5 +1,5 @@
 <?php
-namespace Masta\PlateFormeBundle\OAuth;
+namespace Masta\UserBundleBundle\OAuth;
 
 use FOS\OAuthServerBundle\Storage\GrantExtensionInterface;
 use OAuth2\Model\IOAuth2Client;
