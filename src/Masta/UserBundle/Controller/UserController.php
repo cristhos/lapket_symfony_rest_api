@@ -148,25 +148,48 @@ class UserController extends FOSRestController
     {
         $userManager = $this->container->get('fos_user.user_manager');
         $email = $request->get('email');
-        $username = $request->get('username');
         $password = $request->get('password');
+        $parts = explode("@", $email);
+        $username = $parts[0];
 
         $email_exist = $userManager->findUserByUsernameOrEmail($email);
         $username_exist = $userManager->findUserByUsername($username);
 
         $user = new User();
-
-        if($username_exist || $email_exist)
+        
+        if($email_exist && $username_exist)
         {
             $response = [
                 'register_state' => false,
+                'email' => true
             ];
             $view = View::create();
             $view->setData($response)->setStatusCode(200);
             return $view;
-          }
-          else
-          {
+        }
+        else if($email_exist)
+        {
+            $response = [
+                'register_state' => false,
+                'email' => true,
+            ];
+            $view = View::create();
+            $view->setData($response)->setStatusCode(200);
+            return $view;
+
+        }
+        else if($username_exist)
+        { 
+            $username = $username."".rand(1,15);
+            $register = true;
+        }
+        else
+        {
+           $register = true;
+        }
+       
+        if($register)
+        {
             $user = $userManager->createUser();
             
             $user->setUsername($username);
