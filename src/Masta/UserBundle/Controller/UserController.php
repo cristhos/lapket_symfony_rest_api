@@ -361,14 +361,26 @@ class UserController extends FOSRestController
      */
     public function putPasswordAction(Request $request)
     {
-      if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
-          throw new AccessDeniedException();
-      }
-      $user = $this->get('security.token_storage')->getToken()->getUser();
-      $userManager =  $this->container->get('fos_user.user_manager');
-
+    
       $password = $request->get('password');
       $confirmePassword = $request->get('confirmePassword');
+      $tokenConfirmation = $request->get('tokenConfirmation');
+      
+      $userManager =  $this->container->get('fos_user.user_manager');
+      if($tokenConfirmation != null)
+      {
+          $user = $userManager->findUserByConfirmationToken($tokenConfirmation);
+          if (null === $user) {
+            throw new NotFoundHttpException(sprintf('The user with "confirmation token" does not exist for value "%s"', $token));
+          }
+      }
+      else
+      {
+        if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+          throw new AccessDeniedException();
+        }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+      }
 
       if($password == $confirmePassword)
       {
@@ -408,6 +420,7 @@ class UserController extends FOSRestController
     public function resetPasswordRequestAction(Request $request)
     {
         $slug = $request->query->get('slug');
+        $host = $request->query->get('host');
         $userManager = $this->container->get('fos_user.user_manager');
         $user = $userManager->findUserByUsernameOrEmail($slug);
 
@@ -424,8 +437,18 @@ class UserController extends FOSRestController
             $tokenGenerator = $this->get('fos_user.util.token_generator');
             $user->setConfirmationToken($tokenGenerator->generateToken());
         }
+        $message = \Swift_Message::newInstance()
+                    ->setSubject("Changer de mot de passe")
+                    ->setFrom("cristallithos@gmail.com")
+                    ->setTo($user->getEmail())
+                    ->setBody($this->renderView(
+                             'MastaUserBundle:Email:password_request.html.twig',array('user' => $user,'host'=>$host),
+                             'text/html'
+                             ));
+        $this->get('swiftmailer.mailer')->send($message);
 
-        $this->get('fos_user.mailer')->sendResettingEmailMessage($user);
+        
+        //$this->get('fos_user.mailer')->sendResettingEmailMessage($user);
         $user->setPasswordRequestedAt(new \DateTime());
         $this->get('fos_user.user_manager')->updateUser($user);
 

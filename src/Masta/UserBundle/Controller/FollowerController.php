@@ -236,7 +236,7 @@ class FollowerController extends FOSRestController
 
         $slug = $user_follower->getUsername();
 
-        $entity = $em->getRepository('MastaUserBundle:User')->findUserByUsernameOrEmail($slug);
+        $entity = $em->getRepository('MastaUserBundle:User')->findOneByUsername($slug);
         
         $this->container->get('masta_plateforme.checkor')->checkUser($entity);
         
