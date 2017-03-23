@@ -164,7 +164,7 @@ class UserController extends FOSRestController
                 'email' => true
             ];
             $view = View::create();
-            $view->setData($response)->setStatusCode(200);
+            $view->setData($response)->setStatusCode(400);
             return $view;
         }
         else if($email_exist)
@@ -174,7 +174,7 @@ class UserController extends FOSRestController
                 'email' => true,
             ];
             $view = View::create();
-            $view->setData($response)->setStatusCode(200);
+            $view->setData($response)->setStatusCode(400);
             return $view;
 
         }
@@ -233,7 +233,7 @@ class UserController extends FOSRestController
         ];
 
         $view = View::create();
-        $view->setData($response)->setStatusCode(200);
+        $view->setData($response)->setStatusCode(404);
 
         return $view;
     }

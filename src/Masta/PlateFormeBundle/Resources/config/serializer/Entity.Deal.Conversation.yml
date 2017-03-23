@@ -1,0 +1,13 @@
+Masta\PlateFormeBundle\Entity\Deal\Conversation:
+    exclusion_policy: ALL
+    properties :
+        id :
+            expose : true
+        publishedAt:
+            expose : true
+        product :
+            expose : true
+        isSeen :
+            expose : true
+        author :
+            expose : true
