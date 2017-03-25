@@ -114,6 +114,7 @@ class CategoryFollowerController extends FOSRestController
      *
      *
      * @param int     $category_id      the category id
+     * @return View
      */
     public function postCategoryFollowerAction(Request $request,$category_id)
     {
@@ -121,12 +122,12 @@ class CategoryFollowerController extends FOSRestController
           throw new AccessDeniedException();
       }
 
-      $user = $this->get('security.token_storage')->getToken()->getUser();
-
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $category = $em->getRepository('MastaPlateFormeBundle:Category\Category')->findOneById($category_id);
 
         $pass = true;
+
         foreach($category->getCategoryFollowers() as $c_follower)
         {
           if($c_follower->getAuthor() == $user)
@@ -135,19 +136,28 @@ class CategoryFollowerController extends FOSRestController
               break;
           }
         }
+
+        $data = array();
+        $view = View::create();
+
         if($pass){
           $category_followers = new CategoryFollower();
           $category_followers->setAuthor($user);
           $category_followers->setCategory($category);
           $em->persist($category_followers);
           $em->flush();
+
+          $data = ['status' => true ];
+          $view->setData($data)->setStatusCode(200);
+          return $view;
         }
-
-        $this->checkCategoryAction($category,$user);
-        $view = View::create();
-        $view->setData($category)->setStatusCode(200);
-
-        return $view;
+        else
+        {  
+            $data = ['status' => false ];
+            $view->setData($data)->setStatusCode(400);
+            return $view;
+        }
+        
     }
 
 
@@ -189,10 +199,10 @@ class CategoryFollowerController extends FOSRestController
         $category = $em->getRepository('MastaPlateFormeBundle:Category\Category')
                                 ->find($category_id);
 
-        $this->checkCategoryAction($category,$user);
-
+        $data = array();
+        $data = ['status' => true ];
         $view = View::create();
-        $view->setData($category)->setStatusCode(200);
+        $view->setData($data)->setStatusCode(200);
 
         return $view;
     }
@@ -215,24 +225,5 @@ class CategoryFollowerController extends FOSRestController
     public function removeCategoryFollowerAction(Request $request, $category_id)
     {
         return $this->deleteCategoryFollowerAction($request, $category_id);
-    }
-
-    public function checkCategoryAction($category,$user){
-          $category->setIsFollow(false);
-          $category->setIsAuthent(false);
-          if($user !== NULL)
-          {
-            $category->setIsAuthent(true);
-            foreach($category->getCategoryFollowers() as $categoryFollower )
-            {
-                if($categoryFollower->getAuthor() == $user)
-                {
-                  $category->setIsFollow(true);
-                  break;
-                }
-            }
-          }
-
-
     }
 }

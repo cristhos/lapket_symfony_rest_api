@@ -182,6 +182,8 @@ class FollowerController extends FOSRestController
           }
         }
 
+        $view = View::create();
+
         if($user != $user_followed){
           if($pass){
             $user_follower = new Follower();
@@ -193,18 +195,23 @@ class FollowerController extends FOSRestController
             //service de notification
             $o_followed = $em->getRepository('MastaUserBundle:Follower')->findOneByAuthor($user);
             $notice = $this->container->get('masta_plateforme.notificator')->nofify($o_followed);
+            
+            $data = ['status' => true];
+            $view->setData($data)->setStatusCode(200);
+           
+            return $view;
+          }
+          else
+          {
+            $data = ['status' => false];
+            $view->setData($data)->setStatusCode(400);
           }
         }
-
-        $slug = $user_followed->getUsername();
-        $userManager = $this->container->get('fos_user.user_manager');
-        $entity = $userManager->findUserByUsernameOrEmail($slug);
-        $this->container->get('masta_plateforme.checkor')->checkUser($entity);
-        
-        $view = View::create();
-        $view->setData($entity)->setStatusCode(200);
-
-        return $view;
+        else
+        {
+            $data = ['status' => false];
+            $view->setData($data)->setStatusCode(400);
+        }
     }
 
 
@@ -233,15 +240,10 @@ class FollowerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $em->remove($followed);
         $em->flush();
-
-        $slug = $user_follower->getUsername();
-
-        $entity = $em->getRepository('MastaUserBundle:User')->findOneByUsername($slug);
-        
-        $this->container->get('masta_plateforme.checkor')->checkUser($entity);
-        
+    
+        $data = ['status' => true];
         $view = View::create();
-        $view->setData($entity)->setStatusCode(200);
+        $view->setData($data)->setStatusCode(200);
 
         return $view;
     }

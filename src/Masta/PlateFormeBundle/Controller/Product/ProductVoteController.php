@@ -130,6 +130,8 @@ class ProductVoteController extends FOSRestController
         
         //checking
         $pass = true;
+        $view = View::create();
+
         foreach($product->getVotes() as $vote)
         {
           if($vote->getAuthor() == $user)
@@ -162,18 +164,19 @@ class ProductVoteController extends FOSRestController
             $this->get('swiftmailer.mailer')->send($message);
            }
 
-        
+            $data = ['status' => true ];
+            $view->setData($data)->setStatusCode(200);
+            
+            return $view;
+        }
+        else
+        {
+            $data = ['status' => false ];
+            $view->setData($data)->setStatusCode(400);
+            
+            return $view;
         }
 
-
-        $product = $em->getRepository('MastaPlateFormeBundle:Product\Product')->findOneById($product_id);
-
-        //checking a product
-        $this->container->get('masta_plateforme.checkor')->checkProduct($product);
-
-        $view = new View($product);
-
-        return $view;
     }
 
 
@@ -198,8 +201,8 @@ class ProductVoteController extends FOSRestController
       if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
           throw new AccessDeniedException();
       }
-      $user = $this->get('security.token_storage')->getToken()->getUser();
 
+      $user = $this->get('security.token_storage')->getToken()->getUser();
       $em = $this->getDoctrine()->getManager();
       $product_vote = $em->getRepository('MastaPlateFormeBundle:Product\ProductVote')
                          ->findOneBy(array('author' => $user,'product' => $product_id));
@@ -208,12 +211,9 @@ class ProductVoteController extends FOSRestController
       $em->remove($product_vote);
       $em->flush();
 
-      $product = $em->getRepository('MastaPlateFormeBundle:Product\Product')->findOneById($product_id);
-
-      //checking a product
-      $this->container->get('masta_plateforme.checkor')->checkProduct($product);
-
-      $view = new View($product);
+      $view = View::create();
+      $data = ['status' => false ];
+      $view->setData($data)->setStatusCode(200);
       return $view;
     }
 
