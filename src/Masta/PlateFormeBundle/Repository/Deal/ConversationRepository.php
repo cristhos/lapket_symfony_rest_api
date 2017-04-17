@@ -22,7 +22,7 @@ class ConversationRepository extends EntityRepository
                           ->leftJoin('c.product', 'p')->addSelect('p')
                           ->where('p.author =:author')->setParameter('author', $user)
                           ->orWhere('c.author =:author')->setParameter('author', $user)
-                          ->orderBy('c.publishedAt', 'DESC')
+                          ->orderBy('c.updatedAt', 'DESC')
                           ->getQuery();
     $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
     $pager = new Pagerfanta($pagerAdapter);
@@ -36,7 +36,7 @@ class ConversationRepository extends EntityRepository
     $queryBuilder = $this->createQueryBuilder('c')
                           ->where('c.product =:product')->setParameter('product', $product)
                           ->andWhere('c.author =:author')->setParameter('author', $user)
-                          ->orderBy('c.publishedAt', 'DESC')
+                          ->orderBy('c.updatedAt', 'DESC')
                           ->getQuery();
 
     return $queryBuilder->getResult();

@@ -30,7 +30,6 @@ use Hateoas\Configuration\Route;
 class ConversationController extends FOSRestController
 {
 
-
     /**
      * List all conversations for user session.
      *
@@ -212,6 +211,4 @@ class ConversationController extends FOSRestController
     {
         return $this->deleteConversationAction($request, $conversation_id);
     }
-
-    
 }

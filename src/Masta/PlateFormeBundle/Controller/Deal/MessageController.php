@@ -179,9 +179,16 @@ class MessageController extends FOSRestController
       $message->setAuthor($user);
 
       if($user == $conversation->getAuthor())
+      {
         $message->setReceiver($conversation->getProduct()->getAuthor());
+        $this->counterAction($conversation->getProduct()->getAuthor());
+      }
       else
+      {
         $message->setReceiver($conversation->getAuthor());
+        $this->counterAction($conversation->getAuthor());
+      }
+        
 
       $message->setContent($content);
       $message->setConversation($conversation);
@@ -246,26 +253,37 @@ class MessageController extends FOSRestController
     public function messasgesSeenAction($messages)
     {
       $em = $this->getDoctrine()->getManager();
+      $user = $this->get('security.token_storage')->getToken()->getUser();
+    
       foreach ($messages as $message)
       {
-        if($message->getIsSeen() == false)
+        if($message->getAuthor() != $user)
         {
-            $message->setIsSeen(true);
-            $em->persist($message);
-            $em->flush();
-            
-            $user = $this->get('security.token_storage')->getToken()->getUser();
-            $compteur = $user->getNbReceivedMessages();
-            
-            if($compteur>0)
-                $user->setNbReceivedMessages($compteur-1);
-            else
-                $user->setNbReceivedMessages(0);
-        
-            $em->persist($user);
-            $em->flush();
+            if($message->getIsSeen() == false)
+            {
+                $message->setIsSeen(true);
+                $em->persist($message);
+                $em->flush();
+            }
         }
         
       }
+
+      $this->counterAction($user);
+    }
+
+    public function counterAction($user)
+    {
+       $em = $this->getDoctrine()->getManager();
+       $compteur = 0;
+       foreach ($user->getReceivedMessages() as $rm) {
+          if($rm->getIsSeen() == false)
+          {
+              $compteur ++;
+          }
+       }
+      $user->setNbReceivedMessages($compteur);
+      $em->persist($user);
+      $em->flush();
     }
 }

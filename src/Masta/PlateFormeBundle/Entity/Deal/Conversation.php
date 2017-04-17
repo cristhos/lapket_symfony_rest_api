@@ -31,6 +31,13 @@ class Conversation
     private $publishedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Product\Product", inversedBy="productConversations")
      */
     private $product;
@@ -79,6 +86,7 @@ class Conversation
     public function __construct()
     {
         $this->publishedAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
         $this->isSeen = false;
     }
 
@@ -111,6 +119,15 @@ class Conversation
       }else{
         $this->getProduct()->setNbConversations($compteur-1);
       }
+    }
+
+    /**
+     * @ORM\PreUpdate
+     * Callback pour mettre à jour la date d'édition à chaque modification de l'entité
+     */
+    public function updateDate()
+    {
+        $this->setUpdatedAt(new \Datetime());
     }
 
     //Verification function
@@ -314,5 +331,29 @@ class Conversation
     public function getMessages()
     {
         return $this->messages;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Conversation
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 }

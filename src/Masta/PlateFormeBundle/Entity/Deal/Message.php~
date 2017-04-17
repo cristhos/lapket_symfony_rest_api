@@ -84,11 +84,12 @@ class Message
      */
     public function increase()
     {
-        $compteur = $this->getReceiver()->getReceivedMessages()->count();
-        $this->getReceiver()->setNbReceivedMessages($compteur +1);
-
-        $compteur = $this->getConversation()->getMessages()->count();
-        //$this->getConversation()->setNbMessages($compteur +1);
+      $compteur=0;
+      foreach ($this->getReceiver()->getReceivedMessages() as $message) 
+      {
+         if($message->getIsSeen() == false) $compteur ++;
+      }
+      $this->getReceiver()->setNbReceivedMessages($compteur + 1); 
     }
 
     /**
@@ -96,11 +97,16 @@ class Message
      */
     public function decrease()
     {
-        $compteur = $this->getReceiver()->getReceivedMessages()->count();
-        $this->getReceiver()->setNbReceivedMessages($compteur -1);
-
-        $compteur = $this->getConversation()->getMessages()->count();
-        //$this->getConversation()->setNbMessages($compteur -1);
+      $compteur=0;
+      foreach ($this->getReceiver()->getReceivedMessages() as $message) 
+      {
+         if($message->getIsSeen() == false) $compteur ++;
+      }
+      if($compteur > 0)
+        $this->getReceiver()->setNbReceivedMessages($compteur - 1);
+      else
+        $this->getReceiver()->setNbReceivedMessages(0);
+       
     }
 
   //end special function

@@ -31,6 +31,13 @@ class Conversation
     private $publishedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Product\Product", inversedBy="productConversations")
      */
     private $product;
@@ -127,4 +134,192 @@ class Conversation
 
 
    
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set publishedAt
+     *
+     * @param \DateTime $publishedAt
+     *
+     * @return Conversation
+     */
+    public function setPublishedAt($publishedAt)
+    {
+        $this->publishedAt = $publishedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get publishedAt
+     *
+     * @return \DateTime
+     */
+    public function getPublishedAt()
+    {
+        return $this->publishedAt;
+    }
+
+    /**
+     * Set isSeen
+     *
+     * @param boolean $isSeen
+     *
+     * @return Conversation
+     */
+    public function setIsSeen($isSeen)
+    {
+        $this->isSeen = $isSeen;
+
+        return $this;
+    }
+
+    /**
+     * Get isSeen
+     *
+     * @return boolean
+     */
+    public function getIsSeen()
+    {
+        return $this->isSeen;
+    }
+
+    /**
+     * Set nbReceiverMessages
+     *
+     * @param integer $nbReceiverMessages
+     *
+     * @return Conversation
+     */
+    public function setNbReceiverMessages($nbReceiverMessages)
+    {
+        $this->nbReceiverMessages = $nbReceiverMessages;
+
+        return $this;
+    }
+
+    /**
+     * Get nbReceiverMessages
+     *
+     * @return integer
+     */
+    public function getNbReceiverMessages()
+    {
+        return $this->nbReceiverMessages;
+    }
+
+    /**
+     * Set nbAuthorMessages
+     *
+     * @param integer $nbAuthorMessages
+     *
+     * @return Conversation
+     */
+    public function setNbAuthorMessages($nbAuthorMessages)
+    {
+        $this->nbAuthorMessages = $nbAuthorMessages;
+
+        return $this;
+    }
+
+    /**
+     * Get nbAuthorMessages
+     *
+     * @return integer
+     */
+    public function getNbAuthorMessages()
+    {
+        return $this->nbAuthorMessages;
+    }
+
+    /**
+     * Set product
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
+     *
+     * @return Conversation
+     */
+    public function setProduct(\Masta\PlateFormeBundle\Entity\Product\Product $product = null)
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
+    /**
+     * Get product
+     *
+     * @return \Masta\PlateFormeBundle\Entity\Product\Product
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \Masta\UserBundle\Entity\User $author
+     *
+     * @return Conversation
+     */
+    public function setAuthor(\Masta\UserBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Masta\UserBundle\Entity\User
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * Add message
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $message
+     *
+     * @return Conversation
+     */
+    public function addMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $message)
+    {
+        $this->messages[] = $message;
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $message
+     */
+    public function removeMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $message)
+    {
+        $this->messages->removeElement($message);
+    }
+
+    /**
+     * Get messages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMessages()
+    {
+        return $this->messages;
+    }
 }

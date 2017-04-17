@@ -173,6 +173,29 @@ class Checkor
     {
       $this->checkUser($conversation->getAuthor());
       $this->checkProduct($conversation->getProduct());
+
+      $user = $this->tokenStorage->getToken()->getUser();
+      $pass = false;
+      
+      foreach ($conversation->getMessages() as $cm) 
+      {
+        if($cm->getAuthor() != $user)
+        {
+          if($cm->getIsSeen() == false)
+          {
+              $pass = true;
+          }
+        }
+      }
+
+      if($pass)
+      {
+          $conversation->setIsSeen(false);
+      }
+      else
+      {
+          $conversation->setIsSeen(true);
+      }
     }
 
 
