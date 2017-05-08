@@ -173,7 +173,7 @@ class FollowerController extends FOSRestController
         $em = $this->getDoctrine()->getManager();
         $user_followed = $em->getRepository('MastaUserBundle:User')->find($user_id);
 
-        foreach($user->getFollowers() as $u_followed)
+        foreach($user->getFollows() as $u_followed)
         {
           if($u_followed->getUserFollowed() == $user_followed)
           {

@@ -103,12 +103,12 @@ class Checkor
     {
           if($user != $actual_user)
             {
-                    foreach ($actual_user->getFollowers() as $follower)
+                    foreach ($actual_user->getFollows() as $follower)
                     {
                       if($follower->getUserFollowed() == $user) $user->setIsFollowIt(true);
                     }
 
-                    foreach ($actual_user->getFollows() as $follows)
+                    foreach ($actual_user->getFollowers() as $follows)
                     {
                       if($follows->getAuthor() == $user) $user->setIsFollowMe(true);
                     }
@@ -226,7 +226,8 @@ class Checkor
       }
       else if($kernel->getEnvironment() == "pre_prod")
       {
-        $picture->setWebPath('http://192.168.43.59/masta/'.$picture->getWebPath());
+         //$picture->setWebPath('http://192.168.43.59/masta/'.$picture->getWebPath());
+         $picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
       }
       else
       {

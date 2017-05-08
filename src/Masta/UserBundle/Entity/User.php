@@ -189,7 +189,7 @@ class User extends BaseUser
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $followers;
+    private $follows;
 
     /**
      * @ORM\OneToMany(
@@ -199,7 +199,7 @@ class User extends BaseUser
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $follows;
+    private $followers;
 
     /**
      * @ORM\OneToMany(
