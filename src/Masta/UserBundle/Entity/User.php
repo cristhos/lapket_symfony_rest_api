@@ -313,7 +313,6 @@ class User extends BaseUser
         $this->receivedMessages = new ArrayCollection();
         $this->conversations = new ArrayCollection();
         $this->clients = new ArrayCollection();
-
     }
 
     //Verification function
