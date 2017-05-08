@@ -49,7 +49,7 @@ class ProductRepository extends EntityRepository
     {
       $follows_a = array();
       $categoryFollows = array();
-      foreach ($user->getFollowers() as $follows) $follows_a[] = $follows->getUserFollowed();
+      foreach ($user->getFollows() as $follows) $follows_a[] = $follows->getUserFollowed();
       foreach ($user->getCategoryFollows() as $cf) $categoryFollows[] = $cf->getCategory();
 
         /*recupere tout les produit dont je suis l'auteur ou  qui appartiennent a mes abonnement
