@@ -275,7 +275,7 @@ class UserController extends FOSRestController
       $picture = $request->get('picture');
 
       $fullName = $request->get('fullName');
-      $telephone = $request->get('telephone');
+      $telephone = $request->get('phone_number');
       $birthday = $request->get('birthday');
       $description = $request->get('description');
       $website = $request->get('web_site');

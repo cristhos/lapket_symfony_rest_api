@@ -226,8 +226,8 @@ class Checkor
       }
       else if($kernel->getEnvironment() == "pre_prod")
       {
-         //$picture->setWebPath('http://192.168.43.59/masta/'.$picture->getWebPath());
-         $picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
+         $picture->setWebPath('http://192.168.43.59/masta/'.$picture->getWebPath());
+         //$picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
       }
       else
       {
