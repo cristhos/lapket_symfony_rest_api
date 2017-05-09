@@ -193,7 +193,7 @@ class FollowerController extends FOSRestController
             $em->persist($user_follower);
             $em->flush();
             //service de notification
-            $o_followed = $em->getRepository('MastaUserBundle:Follower')->findOneByAuthor($user);
+            $o_followed = $em->getRepository('MastaUserBundle:Follower')->findOneByUserFollowed($user_followed);
             $notice = $this->container->get('masta_plateforme.notificator')->nofify($o_followed);
             
             $data = ['status' => true];
