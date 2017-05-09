@@ -553,4 +553,25 @@ class UserController extends FOSRestController
         );
 
     }
+
+    /**
+     * Logout user.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @Annotations\View()
+     *
+     * @param Request               $request      the request object
+     *
+     * @return array
+     */
+    public function getUserLogoutsAction(Request $request)
+    {
+        
+    }
 }
