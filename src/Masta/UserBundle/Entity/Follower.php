@@ -98,24 +98,23 @@ class Follower
      */
     public function increase()
     {
-
-      $compteur = $this->getAuthor()->getFollows()->count();
-      $this->getAuthor()->setNbFollows($compteur+1);
-
-      $compteur = $this->getUserFollowed()->getFollowers()->count();
-      $this->getUserFollowed()->setNbFollowers($compteur+1);
-
+      $nb_follows =  $this->getAuthor()->getFollows()->count();
+      $nb_followers = $this->getUserFollowed()->getFollowers()->count();
+      
+      $this->getAuthor()->setNbFollows($nb_follows+1);
+      $this->getUserFollowed()->setNbFollowers($nb_followers+1);
     }
+
     /**
      * @ORM\PreRemove
      */
     public function decrease()
     {
-      $compteur = $this->getAuthor()->getFollows()->count();
-      $this->getAuthor()->setNbFollows($compteur-1);
-
-      $compteur = $this->getUserFollowed()->getFollowers()->count();
-      $this->getUserFollowed()->setNbFollowers($compteur-1);
+      $nb_follows = $this->getAuthor()->getFollows()->count();
+      $nb_followers = $this->getUserFollowed()->getFollowers()->count();
+      
+      $this->getAuthor()->setNbFollows($nb_follows-1);
+      $this->getUserFollowed()->setNbFollowers($nb_followers-1);
     }
 
     

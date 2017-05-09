@@ -275,7 +275,7 @@ class UserController extends FOSRestController
       $picture = $request->get('picture');
 
       $fullName = $request->get('fullName');
-      $telephone = $request->get('telephone');
+      $telephone = $request->get('phone_number');
       $birthday = $request->get('birthday');
       $description = $request->get('description');
       $website = $request->get('web_site');
@@ -552,5 +552,26 @@ class UserController extends FOSRestController
             new Route('get_user_sugestions', array('limit' => $limit,'page' => $page))
         );
 
+    }
+
+    /**
+     * Logout user.
+     *
+     * @ApiDoc(
+     *   resource = true,
+     *   statusCodes = {
+     *     200 = "Returned when successful"
+     *   }
+     * )
+     *
+     * @Annotations\View()
+     *
+     * @param Request               $request      the request object
+     *
+     * @return array
+     */
+    public function getUserLogoutsAction(Request $request)
+    {
+        
     }
 }

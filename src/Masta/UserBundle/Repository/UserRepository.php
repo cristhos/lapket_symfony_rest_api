@@ -29,7 +29,7 @@ class UserRepository extends EntityRepository
     public function getSuggestions($limit, $page, $user)
     {
         $follows_id = null;
-        foreach ($user->getFollowers() as $uf) $follows_id[] = $uf->getUserFollowed()->getId();
+        foreach ($user->getFollows() as $uf) $follows_id[] = $uf->getUserFollowed()->getId();
         $categoryFollows= array(); 
         foreach ($user->getCategoryFollows() as $cf) $categoryFollows[] = $cf->getCategory();
         $city = $user->getCity();

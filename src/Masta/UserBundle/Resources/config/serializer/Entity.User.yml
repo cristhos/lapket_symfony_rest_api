@@ -47,3 +47,5 @@ Masta\UserBundle\Entity\User:
             expose : true
         compteState :
             expose : true
+        LastLogin :
+            expose : true

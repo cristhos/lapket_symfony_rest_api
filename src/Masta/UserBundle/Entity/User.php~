@@ -134,13 +134,6 @@ class User extends BaseUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_albums", type="integer")
-     */
-    private $nbAlbums = 0;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="nb_category_follows", type="integer")
      */
     private $nbCategoryFollows = 0;
@@ -196,7 +189,7 @@ class User extends BaseUser
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $followers;
+    private $follows;
 
     /**
      * @ORM\OneToMany(
@@ -206,7 +199,7 @@ class User extends BaseUser
      * )
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
-    private $follows;
+    private $followers;
 
     /**
      * @ORM\OneToMany(
@@ -217,16 +210,6 @@ class User extends BaseUser
      * @ORM\OrderBy({"publishedAt" = "DESC"})
      */
     private $categoryFollows;
-
-    /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Album\Album",
-     *      mappedBy="author",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $albums;
 
     /**
      * @ORM\OneToMany(
@@ -301,15 +284,6 @@ class User extends BaseUser
     private $receivedMessages;
 
     /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\UserBundle\Entity\OAuth\Client",
-     *      mappedBy="user",
-     *      orphanRemoval=true
-     * )
-     */
-    private $clients;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Stat\Stat", inversedBy="users")
      */
     private $stat;
@@ -331,7 +305,6 @@ class User extends BaseUser
         $this->followers = new ArrayCollection();
         $this->follows = new ArrayCollection();
         $this->categoryFollows = new ArrayCollection();
-        $this->albums = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->productVotes = new ArrayCollection();
         $this->productViews = new ArrayCollection();
@@ -339,6 +312,7 @@ class User extends BaseUser
         $this->sendMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
         $this->conversations = new ArrayCollection();
+        $this->clients = new ArrayCollection();
     }
 
     //Verification function
@@ -388,10 +362,10 @@ class User extends BaseUser
     //Cette fonction calcul le score 
     public function ranking()
     {
-      $city_rank = $this->getCity()->getRank();
+      //$city_rank = $this->getCity()->getRank();
 
 
-      $rank=2.5;
+      $rank=1.5;
       return $rank;
     }
 
@@ -400,9 +374,11 @@ class User extends BaseUser
      */
     public function increase()
     {
-    
-      $compteur = $this->getStat()->getUsers()->count();
-      $this->getStat()->setNbUsers($compteur+1);
+      if($this->getStat() != NULL)
+      {
+        $compteur = $this->getStat()->getUsers()->count();
+        $this->getStat()->setNbUsers($compteur+1);
+      }
     }
 
     /**
@@ -412,9 +388,6 @@ class User extends BaseUser
     {
       $compteur = $this->getStat()->getUsers()->count();
       $this->getStat()->setNbUsers($compteur-1);
-
-      $compteur = $this->getCountry()->getUsers()->count();
-      $this->getCountry()->setNbUsers($compteur-1);
 
       $compteur = $this->getCountry()->getUsers()->count();
       $this->getCountry()->setNbUsers($compteur-1);
@@ -428,7 +401,7 @@ class User extends BaseUser
      */
     public function updateDate()
     {
-        $this->setRank($this->ranking());
+        //$this->setRank($this->ranking());
     }
 
     /**
@@ -864,30 +837,6 @@ class User extends BaseUser
     }
 
     /**
-     * Set nbAlbums
-     *
-     * @param integer $nbAlbums
-     *
-     * @return User
-     */
-    public function setNbAlbums($nbAlbums)
-    {
-        $this->nbAlbums = $nbAlbums;
-
-        return $this;
-    }
-
-    /**
-     * Get nbAlbums
-     *
-     * @return integer
-     */
-    public function getNbAlbums()
-    {
-        return $this->nbAlbums;
-    }
-
-    /**
      * Set nbCategoryFollows
      *
      * @param integer $nbCategoryFollows
@@ -1205,40 +1154,6 @@ class User extends BaseUser
     }
 
     /**
-     * Add album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $album
-     *
-     * @return User
-     */
-    public function addAlbum(\Masta\PlateFormeBundle\Entity\Deal\Message $album)
-    {
-        $this->albums[] = $album;
-
-        return $this;
-    }
-
-    /**
-     * Remove album
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $album
-     */
-    public function removeAlbum(\Masta\PlateFormeBundle\Entity\Deal\Message $album)
-    {
-        $this->albums->removeElement($album);
-    }
-
-    /**
-     * Get albums
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAlbums()
-    {
-        return $this->albums;
-    }
-
-    /**
      * Add product
      *
      * @param \Masta\PlateFormeBundle\Entity\Product\Product $product
@@ -1498,39 +1413,5 @@ class User extends BaseUser
     public function getStat()
     {
         return $this->stat;
-    }
-
-    /**
-     * Add client
-     *
-     * @param \Masta\UserBundle\Entity\OAuth\Client $client
-     *
-     * @return User
-     */
-    public function addClient(\Masta\UserBundle\Entity\OAuth\Client $client)
-    {
-        $this->clients[] = $client;
-
-        return $this;
-    }
-
-    /**
-     * Remove client
-     *
-     * @param \Masta\UserBundle\Entity\OAuth\Client $client
-     */
-    public function removeClient(\Masta\UserBundle\Entity\OAuth\Client $client)
-    {
-        $this->clients->removeElement($client);
-    }
-
-    /**
-     * Get clients
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getClients()
-    {
-        return $this->clients;
     }
 }
