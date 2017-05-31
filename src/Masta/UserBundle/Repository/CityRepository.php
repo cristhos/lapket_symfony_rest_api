@@ -16,7 +16,7 @@ class CityRepository extends \Doctrine\ORM\EntityRepository
     public function getCities($limit, $page)
     {
         $queryBuilder = $this->createQueryBuilder('c')
-                             ->orderBy('c.rank', 'DESC')
+                             ->orderBy('c.name', 'ASC')
                              ->getQuery();
         $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
         $pager = new Pagerfanta($pagerAdapter);
@@ -30,7 +30,7 @@ class CityRepository extends \Doctrine\ORM\EntityRepository
     {
         $queryBuilder = $this->createQueryBuilder('c')
                              ->where('c.country =:country')->setParameter('country', $country) 
-                             ->orderBy('c.rank', 'DESC')
+                             ->orderBy('c.name', 'ASC')
                              ->getQuery();
         $pagerAdapter = new DoctrineORMAdapter($queryBuilder);
         $pager = new Pagerfanta($pagerAdapter);

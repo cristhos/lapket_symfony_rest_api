@@ -153,6 +153,15 @@ class City
       $this->getCountry()->setNbCities($compteur-1);
     }
 
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
 
 
 
