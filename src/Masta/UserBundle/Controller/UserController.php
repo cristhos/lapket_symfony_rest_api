@@ -572,6 +572,20 @@ class UserController extends FOSRestController
      */
     public function getUserLogoutsAction(Request $request)
     {
+        if(!$this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+          throw $this->createAccessDeniedException();
+        }
+
+        $userManager = $this->container->get('fos_user.user_manager');
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         
+        $user->setLastLogin(new \Datetime());
+        $userManager->updateUser($user);
+        
+        $response = array('status' => true);
+        
+        $view = View::create();
+        $view->setData($response)->setStatusCode(200);
+        return $view;
     }
 }
