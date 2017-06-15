@@ -37,8 +37,6 @@ Masta\UserBundle\Entity\User:
             expose : true
         nbNotifications:
             expose : true
-        nbReceivedMessages:
-            expose : true
         isAuthor :
             expose : true
         isFollowIt :

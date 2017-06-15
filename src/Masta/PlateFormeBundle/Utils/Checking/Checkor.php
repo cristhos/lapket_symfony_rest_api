@@ -162,55 +162,6 @@ class Checkor
     }
   }
 
-
-  ////FONCTIONS QUI CONCERNE LES TRAITEMENTS DES CONVERSATIONS
-    public function checkConversations($conversations)
-    {
-      foreach ($conversations as $conversation )  $this->checkConversation($conversation);
-    }
-
-    public function checkConversation($conversation)
-    {
-      $this->checkUser($conversation->getAuthor());
-      $this->checkProduct($conversation->getProduct());
-
-      $user = $this->tokenStorage->getToken()->getUser();
-      $pass = false;
-      
-      foreach ($conversation->getMessages() as $cm) 
-      {
-        if($cm->getAuthor() != $user)
-        {
-          if($cm->getIsSeen() == false)
-          {
-              $pass = true;
-          }
-        }
-      }
-
-      if($pass)
-      {
-          $conversation->setIsSeen(false);
-      }
-      else
-      {
-          $conversation->setIsSeen(true);
-      }
-    }
-
-
-    //check messages
-    public function checkMessages($messages)
-    {
-      foreach ($messages as $message )  $this->checkMessage($message);
-    }
-    //check message
-    public function checkMessage($message)
-    {
-      $this->checkUser($message->getAuthor());
-    }
-
-
     // each array() and check specifique picture
     public function checkPictures($pictures)
     {
@@ -226,7 +177,7 @@ class Checkor
       }
       else if($kernel->getEnvironment() == "pre_prod")
       {
-         //$picture->setWebPath('http://192.168.43.59/masta/'.$picture->getWebPath());
+         //$picture->setWebPath('http://192.168.43.151/masta/'.$picture->getWebPath());
          $picture->setWebPath('http://localhost/masta/'.$picture->getWebPath());
       }
       else
