@@ -65,25 +65,3 @@ product_pictures:
     prefix:   /product
     options:
         expose: true
-
-
-deals:
-    type:     rest
-    resource: Masta\PlateFormeBundle\Controller\Deal\DealController
-    prefix:   /deal
-    options:
-        expose: true
-
-deal_conversations:
-    type:     rest
-    resource: Masta\PlateFormeBundle\Controller\Deal\ConversationController
-    prefix:   /deal/conversation
-    options:
-        expose: true
-
-deal_messages:
-    type:     rest
-    resource: Masta\PlateFormeBundle\Controller\Deal\MessageController
-    prefix:   /deal/message
-    options:
-        expose: true
