@@ -80,20 +80,6 @@ class Stat
     private $nbProducts=0;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="nbConversations", type="integer")
-     */
-    private $nbConversations=0;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="nbMessages", type="integer")
-     */
-    private $nbMessages=0;
-
-    /**
      * @ORM\OneToMany(
      *      targetEntity="Masta\UserBundle\Entity\User",
      *      mappedBy="stat",
@@ -351,55 +337,7 @@ class Stat
     {
         return $this->nbProducts;
     }
-
-    /**
-     * Set nbConversations
-     *
-     * @param integer $nbConversations
-     *
-     * @return Stat
-     */
-    public function setNbConversations($nbConversations)
-    {
-        $this->nbConversations = $nbConversations;
-
-        return $this;
-    }
-
-    /**
-     * Get nbConversations
-     *
-     * @return integer
-     */
-    public function getNbConversations()
-    {
-        return $this->nbConversations;
-    }
-
-    /**
-     * Set nbMessages
-     *
-     * @param integer $nbMessages
-     *
-     * @return Stat
-     */
-    public function setNbMessages($nbMessages)
-    {
-        $this->nbMessages = $nbMessages;
-
-        return $this;
-    }
-
-    /**
-     * Get nbMessages
-     *
-     * @return integer
-     */
-    public function getNbMessages()
-    {
-        return $this->nbMessages;
-    }
-
+   
     /**
      * Add user
      *

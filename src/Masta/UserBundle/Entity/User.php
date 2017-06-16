@@ -146,27 +146,6 @@ class User extends BaseUser
     private $nbNotifications = 0;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="nb_send_messages", type="integer")
-     */
-    private $nbSendMessages = 0;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="nb_received_messages", type="integer")
-     */
-    private $nbReceivedMessages = 0;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="nb_conversations", type="integer")
-     */
-    private $nbConversations = 0;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Country", inversedBy="users")
      */
     private $country;
@@ -253,37 +232,6 @@ class User extends BaseUser
 
 
     /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation",
-     *      mappedBy="author",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $conversations;
-
-    /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Message",
-     *      mappedBy="author",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $sendMessages;
-
-
-    /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Message",
-     *      mappedBy="receiver",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $receivedMessages;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Masta\PlateFormeBundle\Entity\Stat\Stat", inversedBy="users")
      */
     private $stat;
@@ -309,9 +257,6 @@ class User extends BaseUser
         $this->productVotes = new ArrayCollection();
         $this->productViews = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->sendMessages = new ArrayCollection();
-        $this->receivedMessages = new ArrayCollection();
-        $this->conversations = new ArrayCollection();
         $this->clients = new ArrayCollection();
     }
 
@@ -882,79 +827,7 @@ class User extends BaseUser
     public function getNbNotifications()
     {
         return $this->nbNotifications;
-    }
-
-    /**
-     * Set nbSendMessages
-     *
-     * @param integer $nbSendMessages
-     *
-     * @return User
-     */
-    public function setNbSendMessages($nbSendMessages)
-    {
-        $this->nbSendMessages = $nbSendMessages;
-
-        return $this;
-    }
-
-    /**
-     * Get nbSendMessages
-     *
-     * @return integer
-     */
-    public function getNbSendMessages()
-    {
-        return $this->nbSendMessages;
-    }
-
-    /**
-     * Set nbReceivedMessages
-     *
-     * @param integer $nbReceivedMessages
-     *
-     * @return User
-     */
-    public function setNbReceivedMessages($nbReceivedMessages)
-    {
-        $this->nbReceivedMessages = $nbReceivedMessages;
-
-        return $this;
-    }
-
-    /**
-     * Get nbReceivedMessages
-     *
-     * @return integer
-     */
-    public function getNbReceivedMessages()
-    {
-        return $this->nbReceivedMessages;
-    }
-
-    /**
-     * Set nbConversations
-     *
-     * @param integer $nbConversations
-     *
-     * @return User
-     */
-    public function setNbConversations($nbConversations)
-    {
-        $this->nbConversations = $nbConversations;
-
-        return $this;
-    }
-
-    /**
-     * Get nbConversations
-     *
-     * @return integer
-     */
-    public function getNbConversations()
-    {
-        return $this->nbConversations;
-    }
+    }  
 
     /**
      * Set rank
@@ -1287,108 +1160,6 @@ class User extends BaseUser
     public function getNotifications()
     {
         return $this->notifications;
-    }
-
-    /**
-     * Add conversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $conversation
-     *
-     * @return User
-     */
-    public function addConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $conversation)
-    {
-        $this->conversations[] = $conversation;
-
-        return $this;
-    }
-
-    /**
-     * Remove conversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $conversation
-     */
-    public function removeConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $conversation)
-    {
-        $this->conversations->removeElement($conversation);
-    }
-
-    /**
-     * Get conversations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getConversations()
-    {
-        return $this->conversations;
-    }
-
-    /**
-     * Add sendMessage
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $sendMessage
-     *
-     * @return User
-     */
-    public function addSendMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $sendMessage)
-    {
-        $this->sendMessages[] = $sendMessage;
-
-        return $this;
-    }
-
-    /**
-     * Remove sendMessage
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $sendMessage
-     */
-    public function removeSendMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $sendMessage)
-    {
-        $this->sendMessages->removeElement($sendMessage);
-    }
-
-    /**
-     * Get sendMessages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getSendMessages()
-    {
-        return $this->sendMessages;
-    }
-
-    /**
-     * Add receivedMessage
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $receivedMessage
-     *
-     * @return User
-     */
-    public function addReceivedMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $receivedMessage)
-    {
-        $this->receivedMessages[] = $receivedMessage;
-
-        return $this;
-    }
-
-    /**
-     * Remove receivedMessage
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Message $receivedMessage
-     */
-    public function removeReceivedMessage(\Masta\PlateFormeBundle\Entity\Deal\Message $receivedMessage)
-    {
-        $this->receivedMessages->removeElement($receivedMessage);
-    }
-
-    /**
-     * Get receivedMessages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getReceivedMessages()
-    {
-        return $this->receivedMessages;
     }
 
     /**

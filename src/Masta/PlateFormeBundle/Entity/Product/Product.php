@@ -80,13 +80,6 @@ class Product
     /**
      * @var integer
      *
-     * @ORM\Column(name="nb_Conversations", type="integer")
-     */
-    private $nbConversations = 0;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="nb_views", type="integer")
      */
     private $nbViews = 0;
@@ -107,15 +100,6 @@ class Product
      */
     private $votes;
 
-        /**
-     * @ORM\OneToMany(
-     *      targetEntity="Masta\PlateFormeBundle\Entity\Deal\Conversation",
-     *      mappedBy="product",
-     *      orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"publishedAt" = "DESC"})
-     */
-    private $productConversations;
 
 
     /**
@@ -261,18 +245,15 @@ class Product
          $nb_total_products = $this->getStat()->getNbProducts();
          $nb_product_views = $this->getNbViews();
          $nb_product_votes = $this->getNbVotes();
-         $nb_product_conversations = $this->getNbConversations();
          
          if($nb_product_views > 0)
          {
             $vote_probability = 1/$nb_product_views;
-            $conversation_fc = $nb_product_conversations/$nb_product_views; 
             $vote_fc= $nb_product_votes/$nb_product_views;
          }
          else
          {
             $vote_probability=0;
-            $conversation_fc = 0;
             $vote_fc = 0;
 
          }
@@ -283,8 +264,7 @@ class Product
             $product_probability=0;
          
         
-        $rank = $category_rank * (($product_published_at_rank * $vote_probability) + ($vote_fc*$vote_probability)
-        +($conversation_fc*$vote_probability)+($vote_fc*$category_rank) );
+        $rank = $category_rank * (($product_published_at_rank * $vote_probability) + ($vote_fc*$vote_probability)+($vote_fc*$category_rank) );
               
         return $rank;
      }
@@ -503,30 +483,6 @@ class Product
     }
 
     /**
-     * Set nbConversations
-     *
-     * @param integer $nbConversations
-     *
-     * @return Product
-     */
-    public function setNbConversations($nbConversations)
-    {
-        $this->nbConversations = $nbConversations;
-
-        return $this;
-    }
-
-    /**
-     * Get nbConversations
-     *
-     * @return integer
-     */
-    public function getNbConversations()
-    {
-        return $this->nbConversations;
-    }
-
-    /**
      * Set nbViews
      *
      * @param integer $nbViews
@@ -632,39 +588,6 @@ class Product
         return $this->votes;
     }
 
-    /**
-     * Add productConversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
-     *
-     * @return Product
-     */
-    public function addProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
-    {
-        $this->productConversations[] = $productConversation;
-
-        return $this;
-    }
-
-    /**
-     * Remove productConversation
-     *
-     * @param \Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation
-     */
-    public function removeProductConversation(\Masta\PlateFormeBundle\Entity\Deal\Conversation $productConversation)
-    {
-        $this->productConversations->removeElement($productConversation);
-    }
-
-    /**
-     * Get productConversations
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProductConversations()
-    {
-        return $this->productConversations;
-    }
 
     /**
      * Add productView
