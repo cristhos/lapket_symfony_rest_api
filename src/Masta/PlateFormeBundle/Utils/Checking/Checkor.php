@@ -187,4 +187,32 @@ class Checkor
       
     }
 
+    public function checkCategories($categories)
+    {
+      foreach ($categories as $category)
+      {
+        $this->checkCategory($category);
+      }
+    }
+
+    public function checkCategory($category)
+    {
+          $user = $this->tokenStorage->getToken()->getUser();
+          $category->setIsFollow(false);
+          $category->setIsAuthent(false);
+          if($category->getPicture() != null) $this->checkPicture($category->getPicture());
+          if($user != NULL)
+          {
+            $category->setIsAuthent(true);
+            foreach($category->getCategoryFollowers() as $categoryFollower )
+            {
+                if($categoryFollower->getAuthor() == $user)
+                {
+                  $category->setIsFollow(true);
+                  break;
+                }
+            }
+          }
+    }
+
 }

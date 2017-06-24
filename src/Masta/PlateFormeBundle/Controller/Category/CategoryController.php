@@ -59,8 +59,7 @@ class CategoryController extends FOSRestController
         $pagerFactory = new PagerfantaFactory();
 
         //Verification
-          $user = $this->getUser();
-          $this->checkCategoriesAction($categoriesPager,$user);
+         $this->container->get('masta_plateforme.checkor')->checkCategories($categoriesPager);
 
         return $pagerFactory->createRepresentation(
             $categoriesPager,
@@ -103,7 +102,7 @@ class CategoryController extends FOSRestController
         $pagerFactory = new PagerfantaFactory();
 
         //Verification
-          $this->checkCategoriesAction($categoriesPager,$user);
+         $this->container->get('masta_plateforme.checkor')->checkCategories($categoriesPager);
 
         return $pagerFactory->createRepresentation(
             $categoriesPager,
@@ -140,40 +139,11 @@ class CategoryController extends FOSRestController
         }
 
         //Verification
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-        $this->checkCategoryAction($category,$user);
+         $this->container->get('masta_plateforme.checkor')->checkCategory($category);
 
         $view = new View($category);
     
         return $view;
     }
 
-    
-
-
-    public function checkCategoriesAction($categories,$user)
-    {
-      foreach ($categories as $category )
-      {
-        $this->checkCategoryAction($category,$user);
-      }
-    }
-
-    public function checkCategoryAction($category,$user){
-          $category->setIsFollow(false);
-          $category->setIsAuthent(false);
-          if($user != NULL)
-          {
-            $category->setIsAuthent(true);
-            foreach($category->getCategoryFollowers() as $categoryFollower )
-            {
-                if($categoryFollower->getAuthor() == $user)
-                {
-                  $category->setIsFollow(true);
-                  break;
-                }
-            }
-          }
-
-    }
 }
