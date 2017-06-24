@@ -242,7 +242,7 @@ vich_uploader:
     mappings:
         product_images:
             uri_prefix:         %app.path.product_images%
-            upload_destination: %kernel.root_dir%/../web/uploads/images/products
+            upload_destination: %kernel.root_dir%/../web/uploads/pictures
 hwi_oauth:
     connect:
         account_connector: my_user_provider 
