@@ -5,6 +5,8 @@ Masta\PlateFormeBundle\Entity\Category\Category:
             expose : true
         name :
             expose : true
+        picture: 
+            
         publishedAt:
             expose : true
         nbProducts :
