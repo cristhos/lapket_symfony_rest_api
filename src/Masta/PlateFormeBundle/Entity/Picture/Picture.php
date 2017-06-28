@@ -231,4 +231,13 @@ class Picture
     {
         return $this->publishedAt;
     }
+
+    /**
+     * toString
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->getUrl();
+    }
 }

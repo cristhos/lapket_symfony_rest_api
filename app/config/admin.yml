@@ -29,6 +29,14 @@ easy_admin:
             class: Masta\UserBundle\Entity\City
         Category:
             class: Masta\PlateFormeBundle\Entity\Category\Category
+            list:
+                title: "Categories list"
+                fields: ['id', 'name', 'picture', 'publishedAt', 'updatedAt']
+                actions: ['show','edit','delete']
+            form:
+                fields:
+                    - { property: 'name'}
+                    - { property: 'picture', type: 'Masta\PlateFormeBundle\Form\Picture\PictureType' }
         CategoryFollower:
             class: Masta\PlateFormeBundle\Entity\Category\CategoryFollower
         User:

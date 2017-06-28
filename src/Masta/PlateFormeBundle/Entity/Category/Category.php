@@ -92,6 +92,11 @@ class Category
     private $stat;
 
     /**
+    * @ORM\OneToOne(targetEntity="Masta\PlateFormeBundle\Entity\Picture\Picture",cascade={"persist", "remove"})
+    */
+    private $picture;
+
+    /**
     * @ORM\Column(type="decimal", scale=3)
     */
     protected $rank = 1;
@@ -475,5 +480,29 @@ class Category
     public function getStat()
     {
         return $this->stat;
+    }
+
+    /**
+     * Set picture
+     *
+     * @param \Masta\PlateFormeBundle\Entity\Picture\Picture $picture
+     *
+     * @return Category
+     */
+    public function setPicture(\Masta\PlateFormeBundle\Entity\Picture\Picture $picture = null)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return \Masta\PlateFormeBundle\Entity\Picture\Picture
+     */
+    public function getPicture()
+    {
+        return $this->picture;
     }
 }
