@@ -8,3 +8,5 @@
   - vendor
 
   - node_modules
+
+une application reste [e-commerce réaliser avec symfony](https://www.trakode.com/) 
